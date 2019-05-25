@@ -5,7 +5,8 @@ module.exports = class Home {
 			get: {
 				'/': Home.home,
 				'/home': Home.home,
-				'/manifest.json': Home.manifest
+				'/manifest.json': Home.manifest,
+				'/sw.js': Home.serviceWorker
 			}
 		}
 	}
@@ -33,6 +34,11 @@ module.exports = class Home {
 	static manifest(req, res, next) {
 		let fs = require('fs');
 		res.send(fs.readFileSync(`${__dirname}/../../manifest.json`).toString());
+		res.end();
+	}
+
+	static serviceWorker(req, res) {let fs = require('fs');
+		res.send(fs.readFileSync(`${__dirname}/../../sw.js`).toString());
 		res.end();
 	}
 };
