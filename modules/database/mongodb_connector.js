@@ -1,7 +1,8 @@
 const MongoClient = require('mongodb').MongoClient;
+let host = require('./bdd_host');
 
 // Connection URL
-const url = 'mongodb://localhost:27017';
+const url = 'mongodb://' + host + ':27017';
 
 // Database Name
 const dbName = require('./bdd_prefix') + 'assmats';
