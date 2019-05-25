@@ -5,15 +5,11 @@ module.exports = class Parents {
 			get: {
 				'/': Parents.Home,
 				'/mother': Parents.Mother,
-				'/father': Parents.Father,
-				'/son': Parents.Son,
-				'/daughter': Parents.Daughter,
+				'/father': Parents.Father
 			},
 			post: {
 				'/mother': Parents.Mother,
 				'/father': Parents.Father,
-				'/son': Parents.Son,
-				'/daughter': Parents.Daughter,
 			}
 		};
 	}
@@ -32,13 +28,5 @@ module.exports = class Parents {
 
 	static Father(req, res, next) {
 		res.render('index', { title: 'Parents Father' });
-	}
-
-	static Son(req, res, next) {
-		res.render('index', { title: 'Parents Son' });
-	}
-
-	static Daughter(req, res, next) {
-		res.render('index', { title: 'Parents Daughter' });
 	}
 };
