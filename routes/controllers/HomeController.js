@@ -37,7 +37,9 @@ module.exports = class Home {
 		res.end();
 	}
 
-	static serviceWorker(req, res) {let fs = require('fs');
+	static serviceWorker(req, res) {
+		let fs = require('fs');
+		res.type('application/javascript');
 		res.send(fs.readFileSync(`${__dirname}/../../sw.js`).toString());
 		res.end();
 	}
