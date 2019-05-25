@@ -9,7 +9,7 @@ module.exports = class Parents {
 			},
 			post: {
 				'/mother': Parents.Mother,
-				'/father': Parents.Father,
+				'/father': Parents.Father
 			}
 		};
 	}
