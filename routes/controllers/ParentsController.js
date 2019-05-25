@@ -18,15 +18,15 @@ module.exports = class Parents {
 		return 'parents';
 	}
 
-	static Home(req, res, next) {
-		res.render('index', { title: 'Parents Home' });
+	static Home(req, res) {
+		res.render('parents/index', { title: 'Parents Home' });
 	}
 
-	static Mother(req, res, next) {
-		res.render('index', { title: 'Parents Mother' });
+	static Mother(req, res) {
+		res.render('parents/mother', { title: 'Parents Mother' });
 	}
 
-	static Father(req, res, next) {
-		res.render('index', { title: 'Parents Father' });
+	static Father(req, res) {
+		res.render('parents/father', { title: 'Parents Father' });
 	}
 };

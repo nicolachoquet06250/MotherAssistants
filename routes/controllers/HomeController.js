@@ -15,23 +15,16 @@ module.exports = class Home {
 		return 'home';
 	}
 
-	static home(req, res, next) {
-		let mongodb = require('../../modules/database/mongodb_connector');
-		mongodb.client.connect(err => {
-			if(err === null) {
-				console.log('connection ok');
-				let db = mongodb.client.db(mongodb.dbName);
-				db.collection('users');
-				db.collection('activities');
+	static home(req, res) {
+		let connector = require('../../modules/database/mongodb_connector');
 
-				mongodb.client.close();
-			}
-		});
-		res.render('index', { title: 'Express' });
+		connector.onMongoConnect(client => {
+			res.render('home/index', { title: 'General Home' });
+		}, err => res.status(403).render('error', { message: 'Forbidden', error: { status: 403, stack: err } }));
 	}
 
 
-	static manifest(req, res, next) {
+	static manifest(req, res) {
 		let fs = require('fs');
 		res.send(fs.readFileSync(`${__dirname}/../../manifest.json`).toString());
 		res.end();

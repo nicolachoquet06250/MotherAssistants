@@ -7,6 +7,7 @@
     "generate": "node commands/command.js generate"
   },
   "dependencies": {
+    "connect-redis": "^3.4.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
@@ -14,6 +15,7 @@
     "mongodb": "^3.2.6",
     "morgan": "~1.9.1",
     "node-sass-middleware": "0.11.0",
+    "redis": "^2.8.0",
     "vash": "~0.12.6"
   }
 }

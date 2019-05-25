@@ -18,24 +18,24 @@ module.exports = class Account {
 		return 'account';
 	}
 
-	static Home(req, res, next) {
-		res.render('index', { title: 'Get Home' });
+	static Home(req, res) {
+		res.render('account/index', { title: 'Account Home' });
 	}
 
-	static SignIn(req, res, next) {
-		res.render('index', { title: 'Post Home' });
+	static SignIn(req, res) {
+		res.render('account/signin', { title: 'Account Get Signin' });
 	}
 
-	static SignInPost(req, res, next) {
-		res.render('index', { title: 'Post Home' });
+	static SignInPost(req, res) {
+		res.render('account/signin', { title: 'Account Post Signin' });
 	}
 
-	static SignOn(req, res, next) {
-		res.render('index', { title: 'Post Home' });
+	static SignOn(req, res) {
+		res.render('account/signon', { title: 'Account Get Signon' });
 	}
 
-	static SignOnPost(req, res, next) {
-		res.render('index', { title: 'Post Home' });
+	static SignOnPost(req, res) {
+		res.render('account/signon', { title: 'Account Post Singon' });
 	}
 
 };

@@ -31,6 +31,8 @@ loadRoutes(app);
 // catch 404 and forward to error handler
 app.use((req, res, next) => next(createError(404)));
 
+app.use((err, res, next) => next(createError(403)));
+
 // error handler
 app.use((err, req, res, next) => {
 	// set locals, only providing error in development
