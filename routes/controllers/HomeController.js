@@ -26,7 +26,8 @@ module.exports = class Home {
 									`ainsi, vous pourez communiquer avec les parents sur l'application, poster des photos accessibles par les 2 parents, ainsi que noter les différents activitées pratiqués la journée, les repas, les besoins, etc`,
 									`tout ça sous forme de calandrier, ce qui rend plus simple la recherche d'un évenement en particulier `]
 				},
-				current_page: 'home'
+				current_page: 'home',
+				logged: false
 			});
 		// }, err => {
 		// 	res.status(403).render('error', {

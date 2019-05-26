@@ -23,7 +23,7 @@ module.exports = class Account {
 	}
 
 	static SignIn(req, res) {
-		res.render('account/signin', { title: 'Account Get Signin' });
+		res.render('account/signin', { title: 'Account Get Signin', current_page: 'signin', logged: false });
 	}
 
 	static SignInPost(req, res) {
@@ -31,7 +31,7 @@ module.exports = class Account {
 	}
 
 	static SignOn(req, res) {
-		res.render('account/signon', { title: 'Account Get Signon' });
+		res.render('account/signon', { title: 'Account Get Signon', current_page: 'signon', logged: false });
 	}
 
 	static SignOnPost(req, res) {

@@ -3,14 +3,26 @@
 		@{ var home_active = 'active'; }
 	}
 	<li><a href="/home" class="@home_active">Accueil</a></li>
-	@if(model.current_page === 'messages') {
-		@{ var messages_active = 'active'; }
+	@if(model.logged) {
+		@if(model.current_page === 'messages') {
+			@{ var messages_active = 'active'; }
+		}
+		<li><a href="/parents/messages" class="@messages_active">Messages</a></li>
+		@if(model.current_page === 'diary') {
+			@{ var diary_active = 'active'; }
+		}
+		<li><a href="/children/diary" class="@diary_active">Cahier de vie</a></li>
 	}
-	<li><a href="/parents/messages" class="@messages_active">Messages</a></li>
-	@if(model.current_page === 'diary') {
-		@{ var diary_active = 'active'; }
+	else {
+		@if(model.current_page === 'signin') {
+			@{ var signin_active = 'active'; }
+		}
+		<li><a href="/account/signin" class="@signin_active">Je me connect</a></li>
+		@if(model.current_page === 'signon') {
+			@{ var signon_active = 'active'; }
+		}
+		<li><a href="/account/signon" class="@signon_active">Je m'inscrit</a></li>
 	}
-	<li><a href="/children/diary" class="@diary_active">Cahier de vie</a></li>
 </ul>
 <nav>
 	<div class="nav-wrapper">
@@ -21,14 +33,26 @@
 				@{ var home_active = 'active'; }
 			}
 			<li><a href="/home" class="@home_active">Accueil</a></li>
-			@if(model.current_page === 'messages') {
-				@{ var messages_active = 'active'; }
+			@if(model.logged) {
+				@if(model.current_page === 'messages') {
+					@{ var messages_active = 'active'; }
+				}
+				<li><a href="/parents/messages" class="@messages_active">Messages</a></li>
+				@if(model.current_page === 'diary') {
+					@{ var diary_active = 'active'; }
+				}
+				<li><a href="/children/diary" class="@diary_active">Cahier de vie</a></li>
 			}
-			<li><a href="/parents/messages" class="@messages_active">Messages</a></li>
-			@if(model.current_page === 'diary') {
-				@{ var diary_active = 'active'; }
+			else {
+				@if(model.current_page === 'signin') {
+					@{ var signin_active = 'active'; }
+				}
+				<li><a href="/account/signin" class="@signin_active">Je me connect</a></li>
+				@if(model.current_page === 'signon') {
+					@{ var signon_active = 'active'; }
+				}
+				<li><a href="/account/signon" class="@signon_active">Je m'inscrit</a></li>
 			}
-			<li><a href="/children/diary" class="@diary_active">Cahier de vie</a></li>
 		</ul>
 	</div>
 </nav>
