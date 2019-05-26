@@ -1,6 +1,6 @@
-const CACHE_NAME = 'V2';
+const CACHE_NAME = 'V3';
 const STATIC_CACHE_URLS = ['/', '/home', '/account/signin', '/account/signon',
-	'/chrildren/son', '/chrildren/daughter',
+	'/children/son', '/children/daughter',
 	'/parents/mother', '/parents/father',
 	'/stylesheets/style.css', '/javascripts/script.js',
 	'https://use.fontawesome.com/releases/v5.8.2/css/all.css',
