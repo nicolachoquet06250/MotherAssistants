@@ -18,9 +18,12 @@ module.exports = class Home {
 	static home(req, res) {
 		let connector = require('../../modules/database/mongodb_connector');
 
-		connector.onMongoConnect(client => {
-			res.render('home/index', { title: 'General Home' });
-		}, err => res.status(403).render('error', { message: 'Forbidden', error: { status: 403, stack: err } }));
+		res.send('host: ' + require('../../modules/database/bdd_host') + ', prefix: ' + require('../../modules/database/bdd_prefix'));
+		res.end();
+
+		// connector.onMongoConnect(client => {
+		// 	res.render('home/index', { title: 'General Home' });
+		// }, err => res.status(403).render('error', { message: 'Forbidden', error: { status: 403, stack: err } }));
 	}
 
 
