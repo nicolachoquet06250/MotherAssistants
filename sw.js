@@ -1,10 +1,13 @@
 const CACHE_NAME = 'V1';
-const STATIC_CACHE_URLS = ['/', '/home', '/account/signin', '/account/signon', '/stylesheets/style.css',
-'https://use.fontawesome.com/releases/v5.8.2/css/all.css',
-'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css',
-'https://code.jquery.com/jquery-3.3.1.slim.min.js',
-'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js',
-'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'];
+const STATIC_CACHE_URLS = ['/', '/home', '/account/signin', '/account/signon',
+	'/chrildren/son', '/chrildren/daughter',
+	'/parents/mother', '/parents/father',
+	'/stylesheets/style.css', '/javascripts/script.js',
+	'https://use.fontawesome.com/releases/v5.8.2/css/all.css',
+	'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css',
+	'https://code.jquery.com/jquery-3.3.1.slim.min.js',
+	'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js',
+	'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'];
 
 self.addEventListener('install', event => {
 	console.log('Service Worker installing.');
