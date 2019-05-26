@@ -1,4 +1,4 @@
-const CACHE_NAME = 'V1';
+const CACHE_NAME = 'V2';
 const STATIC_CACHE_URLS = ['/', '/home', '/account/signin', '/account/signon',
 	'/chrildren/son', '/chrildren/daughter',
 	'/parents/mother', '/parents/father',
