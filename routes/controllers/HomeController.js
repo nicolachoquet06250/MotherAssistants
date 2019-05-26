@@ -18,7 +18,7 @@ module.exports = class Home {
 	static home(req, res) {
 		let connector = require('../../modules/database/mongodb_connector');
 
-		res.send('host: ' + require('../../modules/database/bdd_host') + ', prefix: ' + require('../../modules/database/bdd_prefix'));
+		res.send('host: ' + require('../../modules/database/bdd_host')() + ', prefix: ' + require('../../modules/database/bdd_prefix')());
 		res.end();
 
 		// connector.onMongoConnect(client => {

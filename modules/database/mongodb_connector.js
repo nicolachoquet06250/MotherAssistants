@@ -5,7 +5,7 @@ let host = require('./bdd_host');
 const url = 'mongodb://' + host + ':27017';
 
 // Database Name
-const dbName = require('./bdd_prefix') + 'assmats';
+const dbName = require('./bdd_prefix')() + 'assmats';
 
 // Create a new MongoClient
 const client = new MongoClient(url, { useNewUrlParser: true });
