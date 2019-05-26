@@ -48,4 +48,6 @@ if ('serviceWorker' in navigator) {
 
 $(document).ready(() => {
 	$('.parallax').parallax();
+	$('.sidenav').sidenav();
 });
+$('.dropdown-trigger').dropdown();
