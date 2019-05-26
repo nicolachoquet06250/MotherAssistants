@@ -4,8 +4,8 @@
 	"lang": "fr-FR",
 	"description": "application de gestion de planing, de factures ainsi que de numérisation des messages et photos mises dans des cahiers papier pour plus d'économie de papier ainsi que pour éviter les oublies",
 	"start_url": "/",
-	"background_color": "skyblue",
-	"theme_color": "skyblue",
+	"background_color": "rgb(238,110,115)",
+	"theme_color": "rgb(238,110,115)",
 	"display": "standalone",
 	"icons": [
 		{
