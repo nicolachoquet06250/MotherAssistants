@@ -5,7 +5,8 @@ module.exports = class Parents {
 			get: {
 				'/': Parents.Home,
 				'/mother': Parents.Mother,
-				'/father': Parents.Father
+				'/father': Parents.Father,
+				'/messages': Parents.Messages
 			},
 			post: {
 				'/mother': Parents.Mother,
@@ -28,5 +29,9 @@ module.exports = class Parents {
 
 	static Father(req, res) {
 		res.render('parents/father', { title: 'Parents Father' });
+	}
+
+	static Messages(req, res) {
+		res.render('parents/messages', { title: 'Parents Messages' })
 	}
 };

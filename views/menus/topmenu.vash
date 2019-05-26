@@ -1,0 +1,11 @@
+<ul class="nav">
+	<li class="nav-item">
+		<a class="nav-link active" href="/">Accueil</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="/parents/messages">Messages</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="/children/diary">Cahier de vie</a>
+	</li>
+</ul>

@@ -13,5 +13,11 @@
  - parents ( mother assistant role )
  - parents/mother ( parent role )
  - parents/father ( parent role )
- - parents/son ( parent / mother assistant role )
- - parents/daughter ( parent / mother assistant role )
+ - parents/messages ( parent role )
+ 
+ - children/son/ ( parent / mother assistant role )
+ - children/daughter?child_id={} ( parent / mother assistant role )
+ - children/son/diary?child_id={} ( parent / mother assistant role )
+ - children/daughter/diary?child_id={} ( parent / mother assistant role )
+
+ - children/diary

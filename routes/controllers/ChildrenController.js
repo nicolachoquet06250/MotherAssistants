@@ -6,6 +6,7 @@ module.exports = class Children {
 				'/': Children.Home,
 				'/son': Children.Son,
 				'/daughter': Children.Daughter,
+				'/diary': Children.Diary
 			},
 			post: {
 				'/son': Children.Son,
@@ -28,5 +29,9 @@ module.exports = class Children {
 
 	static Daughter(req, res) {
 		res.render('children/daughter', { title: 'Children Daughter' });
+	}
+
+	static Diary(req, res) {
+		res.render('children/diary', { title: 'Children Diary' })
 	}
 };

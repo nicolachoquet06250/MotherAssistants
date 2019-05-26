@@ -9,8 +9,10 @@ module.exports = class extends DAO {
 		return 'bills';
 	}
 
-	get(s_callback, e_callback = null) {
-		this.Collection.find({}).toArray((err, documents) => err ? (e_callback !== null ? e_callback(err) : null) : s_callback(documents));
+	async get(s_callback, e_callback = null) {
+		let bills = await this.Collection.find({}).toArray();
+		return bills.map(bill => this.createEntity(bill));
+		// return await this.Collection.find({}).toArray(/*(err, documents) => err ? (e_callback !== null ? e_callback(err) : null) : s_callback(documents)*/);
 	}
 
 	add(...bills) {

@@ -19,8 +19,18 @@ module.exports = class Home {
 		let connector = require('../../modules/database/mongodb_connector');
 
 		connector.onMongoConnect(client => {
-			res.render('home/index', { title: 'General Home' });
-		}, err => res.status(403).render('error', { message: 'Forbidden', error: { status: 403, stack: err } }));
+			res.render('home/index', {
+				title: 'General Home'
+			});
+		}, err => {
+			res.status(403).render('error', {
+				message: 'Forbidden',
+				error: {
+					status: 403,
+					stack: err
+				}
+			})
+		});
 	}
 
 
