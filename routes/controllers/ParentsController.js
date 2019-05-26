@@ -32,6 +32,6 @@ module.exports = class Parents {
 	}
 
 	static Messages(req, res) {
-		res.render('parents/messages', { title: 'Parents Messages' })
+		res.render('parents/messages', { title: 'Parents Messages', current_page: 'messages' })
 	}
 };

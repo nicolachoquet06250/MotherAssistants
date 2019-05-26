@@ -45,3 +45,7 @@ if ('serviceWorker' in navigator) {
 		.then(serviceWorker => console.log('Service Worker registered: ' + serviceWorker))
 		.catch(error => console.log('Error registering the Service Worker: ' + error));
 }
+
+$(document).ready(() => {
+	$('.parallax').parallax();
+});

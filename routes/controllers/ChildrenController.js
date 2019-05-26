@@ -32,6 +32,6 @@ module.exports = class Children {
 	}
 
 	static Diary(req, res) {
-		res.render('children/diary', { title: 'Children Diary' })
+		res.render('children/diary', { title: 'Children Diary', current_page: 'diary' })
 	}
 };

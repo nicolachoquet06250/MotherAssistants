@@ -1,11 +1,19 @@
-<ul class="nav">
-	<li class="nav-item">
-		<a class="nav-link active" href="/">Accueil</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" href="/parents/messages">Messages</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" href="/children/diary">Cahier de vie</a>
-	</li>
-</ul>
+<nav>
+	<div class="nav-wrapper">
+		<a href="/" class="brand-logo">MotherAssistants</a>
+		<ul class="right hide-on-med-and-down">
+			@if(model.current_page === 'home') {
+				@{ var home_active = 'active'; }
+			}
+			<li><a href="/home" class="@home_active">Accueil</a></li>
+			@if(model.current_page === 'messages') {
+				@{ var messages_active = 'active'; }
+			}
+			<li><a href="/parents/messages" class="@messages_active">Messages</a></li>
+			@if(model.current_page === 'diary') {
+				@{ var diary_active = 'active'; }
+			}
+			<li><a href="/children/diary" class="@diary_active">JavaScript</a></li>
+		</ul>
+	</div>
+</nav>
