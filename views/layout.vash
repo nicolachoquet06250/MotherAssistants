@@ -11,7 +11,7 @@
 	<meta name="application-name" content="MotherAssistants"/>
 	<meta name="apple-mobile-web-app-title" content="MotherAssistants"/>
 	<meta name="msapplication-starturl" content="/"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1, max-width=1, shrink-to-fit=no"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	      rel="stylesheet">

@@ -10,9 +10,7 @@ module.exports = class extends DAO {
 	}
 
 	async get(s_callback, e_callback = null) {
-		let accounts = await this.Collection.find({}).toArray();
-		return accounts.map(account => this.createEntity(account));
-		// return await this.Collection.find({}).toArray(/*(err, documents) => err ? (e_callback !== null ? e_callback(err) : null) : s_callback(documents)*/);
+		return this.Collection.find({}).toArray((err, documents) => err ? (e_callback !== null ? e_callback(err) : null) : s_callback(documents));
 	}
 
 	add(...accounts) {
@@ -22,7 +20,7 @@ module.exports = class extends DAO {
 
 	update(where, updatedAccount, forceOne = false, s_callback = null, e_callback = null) {
 		let callback = (err, res) => err ? (e_callback !== null ? e_callback(err) : null) : (s_callback !== null ? s_callback(res) : null);
-		let updateObject = { $set: Account };
+		let updateObject = { $set: updatedAccount };
 		forceOne ? this.Collection.updateOne(where, updateObject, callback) : this.Collection.updateMany(where, updateObject, callback);
 	}
 
