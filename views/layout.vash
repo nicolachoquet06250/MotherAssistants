@@ -17,7 +17,7 @@
 	      rel="stylesheet">
 
 	<link rel="stylesheet"
-	      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+	      href="/stylesheets/materializecss/materialize.min.css"
 	      media="screen,projection">
 
 	<link rel='stylesheet'
@@ -34,7 +34,8 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 	        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 	        crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script src="/javascripts/materializecss//materialize.min.js"></script>
 	<script src="/javascripts/script.js"></script>
+	@html.block('additional_js')
 </body>
 </html>

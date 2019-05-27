@@ -46,15 +46,46 @@ if ('serviceWorker' in navigator) {
 		.catch(error => console.log('Error registering the Service Worker: ' + error));
 }
 
-$(document).ready(() => {
-	$('.parallax').parallax();
-	$('.sidenav').sidenav();
-	$('.datepicker').datepicker({
-		format: 'dd/mm/yyyy'
+function setup_home() {
+	setup_default();
+}
+
+function setup_signon() {
+	$(document).ready(() => {
+		$('.parallax').parallax();
+		$('.sidenav').sidenav();
+		$('.datepicker').datepicker({
+			format: 'dd/mm/yyyy'
+		});
+		$('.dropdown-trigger').dropdown();
+		change_label_agreaments(document.querySelector('#nb_agreaments').value);
 	});
-	change_label_agreaments(document.querySelector('#nb_agreaments').value);
-});
-$('.dropdown-trigger').dropdown();
+}
+
+function setup_default() {
+	$(document).ready(() => {
+		$('.parallax').parallax();
+		$('.sidenav').sidenav();
+		$('.datepicker').datepicker({
+			format: 'dd/mm/yyyy'
+		});
+		$('.dropdown-trigger').dropdown();
+	});
+}
+
+function setup(page_name) {
+	switch (page_name) {
+		case 'home':
+			setup_home();
+			break;
+		case 'signon':
+			setup_signon();
+			break;
+		default:
+			setup_default();
+			break;
+	}
+}
 
 function change_label_agreaments(new_value) {
 	document.querySelector('label[for=nb_agreaments]').innerHTML = new_value;

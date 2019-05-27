@@ -61,4 +61,9 @@
 			</div>
 		</footer>
 	})
+	@html.block('additional_js', function(model) {
+		<script>
+			setup('home');
+		</script>
+	})
 })
