@@ -49,5 +49,13 @@ if ('serviceWorker' in navigator) {
 $(document).ready(() => {
 	$('.parallax').parallax();
 	$('.sidenav').sidenav();
+	$('.datepicker').datepicker({
+		format: 'dd/mm/yyyy'
+	});
+	change_label_agreaments(document.querySelector('#nb_agreaments').value);
 });
 $('.dropdown-trigger').dropdown();
+
+function change_label_agreaments(new_value) {
+	document.querySelector('label[for=nb_agreaments]').innerHTML = new_value;
+}

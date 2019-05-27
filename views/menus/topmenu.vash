@@ -17,11 +17,11 @@
 		@if(model.current_page === 'signin') {
 			@{ var signin_active = 'active'; }
 		}
-		<li><a href="/account/signin" class="@signin_active">Je me connect</a></li>
+		<li><a href="/account/signin" class="@signin_active">Je me connecte</a></li>
 		@if(model.current_page === 'signon') {
 			@{ var signon_active = 'active'; }
 		}
-		<li><a href="/account/signon" class="@signon_active">Je m'inscrit</a></li>
+		<li><a href="/account/signon" class="@signon_active">Je m'inscris</a></li>
 	}
 </ul>
 <nav>
@@ -47,11 +47,11 @@
 				@if(model.current_page === 'signin') {
 					@{ var signin_active = 'active'; }
 				}
-				<li><a href="/account/signin" class="@signin_active">Je me connect</a></li>
+				<li><a href="/account/signin" class="@signin_active">Je me connecte</a></li>
 				@if(model.current_page === 'signon') {
 					@{ var signon_active = 'active'; }
 				}
-				<li><a href="/account/signon" class="@signon_active">Je m'inscrit</a></li>
+				<li><a href="/account/signon" class="@signon_active">Je m'inscris</a></li>
 			}
 		</ul>
 	</div>
