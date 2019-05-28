@@ -1,9 +1,10 @@
 #Mother Assistant App
-
-##structure
-
+##Structure
+###Links
+   - https://materializecss.com
+   - https://motherassistants.nicolaschoquet.fr
+---------------------------------------------------------------------
 ###URLS
-
     - Home ( everybody access )
  
     - account ( login person access )
@@ -23,9 +24,8 @@
     - children/daughter/diary?child_id={} ( parent / mother assistant role )
 
     - children/diary
- 
+ ---------------------------------------------------------------
  ###entities
-
     - account
         - first_name -> string
         - last_name - string
