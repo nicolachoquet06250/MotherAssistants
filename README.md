@@ -3,7 +3,10 @@
 ###Links
    - (doc materializeCSS) https://materializecss.com
    - (url du site en ligne) https://motherassistants.nicolaschoquet.fr
-   - (jsdoc parser) https://www.npmjs.com/package/comment-parser
+   - (jsdoc parser) :
+        - https://www.npmjs.com/package/comment-parser
+        - https://github.com/eslint/doctrine
+        - https://medium.com/4thought-studios/documenting-javascript-projects-f72429da2eea
 ---------------------------------------------------------------------
 ###URLS
     - Home ( everybody access )
