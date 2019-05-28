@@ -65,7 +65,8 @@ let setup_default = (after_init = null) =>
 		}
 	});
 
-let setup_home = setup_sign_in = setup_default;
+let setup_home = () => setup_default();
+let setup_sign_in = () => setup_default();
 
 let setup_sign_on = () => setup_default(() => {
 	change_label_approvals(document.querySelector('#nb_approvals').value);
@@ -78,6 +79,4 @@ let setup_sign_on = () => setup_default(() => {
 
 let setup = page_name => pages.includes(page_name) ? eval(`setup_${page_name}()`) : setup_default();
 
-function change_label_approvals(new_value) {
-	document.querySelector('label[for=nb_approvals]').innerHTML = new_value;
-}
+let change_label_approvals = new_value => document.querySelector('label[for=nb_approvals]').innerHTML = new_value;
