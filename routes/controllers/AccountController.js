@@ -29,23 +29,22 @@ module.exports = class Account {
 	}
 
 	static Home(req, res) {
-		res.render('account/index', { title: 'Account Home', logged: false });
+		res.render('account/index', { title: 'Account Home', logged: false, app_name: 'MotherAssistants', current_year: (new Date()).getFullYear() });
 	}
 
 	static SignIn(req, res) {
-		res.render('account/signin', { title: 'Account Get Signin', current_page: 'sign_in', logged: false });
+		res.render('account/signin', { title: 'Account Get Signin', current_page: 'sign_in', logged: false, app_name: 'MotherAssistants', current_year: (new Date()).getFullYear() });
 	}
 
 	static SignInPost(req, res) {
-		res.render('account/signin', { title: 'Account Post Signin', current_page: 'sign_in', logged: false });
+		res.render('account/signin', { title: 'Account Post Signin', current_page: 'sign_in', logged: false, app_name: 'MotherAssistants', current_year: (new Date()).getFullYear() });
 	}
 
 	static SignOn(req, res) {
-		res.render('account/signon', { title: 'Account Get Signon', current_page: 'sign_on', logged: false });
+		res.render('account/signon', { title: 'Account Get Signon', current_page: 'sign_on', logged: false, app_name: 'MotherAssistants', current_year: (new Date()).getFullYear() });
 	}
 
 	static SignOnPost(req, res) {
-		let fs = require('fs');
 		let Logger = require('../../modules/helpers/Logger');
 		let profile_pic = req.files.profile_pic;
 		let post = req.body;
@@ -62,7 +61,9 @@ module.exports = class Account {
 		res.render('account/signon', {
 			title: 'Account Post Signon',
 			current_page: 'sign_on',
-			logged: false
+			logged: false,
+			app_name: 'MotherAssistants',
+			current_year: (new Date()).getFullYear()
 		});
 	}
 };

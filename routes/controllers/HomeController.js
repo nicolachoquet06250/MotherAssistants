@@ -27,7 +27,9 @@ module.exports = class Home {
 									`tout ça sous forme de calandrier, ce qui rend plus simple la recherche d'un évenement en particulier `]
 				},
 				current_page: 'home',
-				logged: false
+				logged: false,
+				app_name: 'MotherAssistants',
+				current_year: (new Date()).getFullYear()
 			});
 		// }, err => {
 		// 	res.status(403).render('error', {
