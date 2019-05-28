@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "generate": "node commands/command.js generate",
-    "postinstall": "mkdir uploads && mkdir uploads/tmp"
+    "preinstall": "node commands/preinstall.js",
+    "postinstall": "node commands/postinstall.js"
   },
   "dependencies": {
     "connect-redis": "^3.4.1",
