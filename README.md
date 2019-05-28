@@ -1,8 +1,9 @@
 #Mother Assistant App
 ##Structure
 ###Links
-   - https://materializecss.com
-   - https://motherassistants.nicolaschoquet.fr
+   - (doc materializeCSS) https://materializecss.com
+   - (url du site en ligne) https://motherassistants.nicolaschoquet.fr
+   - (jsdoc parser) https://www.npmjs.com/package/comment-parser
 ---------------------------------------------------------------------
 ###URLS
     - Home ( everybody access )
