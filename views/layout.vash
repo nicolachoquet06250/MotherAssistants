@@ -2,7 +2,9 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-	<title>@model.title</title>
+	@html.block('page_title', function(model) {
+		<title>@model.title</title>
+	})
 
 	<link rel="icon" href="/images/favicon.ico" />
 	<link rel="manifest" href="/manifest.json"/>
@@ -22,15 +24,20 @@
 
 	<link rel='stylesheet'
 	      href='/stylesheets/style.css' />
+	@html.block('additional_css')
 </head>
 <body>
 	<header>
-		@html.block('menu')
+		@html.block('menu', function(model) {
+			@html.include('includes/menus/top_menu')
+		})
 	</header>
 	<main>
 		@html.block('content')
 	</main>
-	@html.block('footer')
+	@html.block('footer', function(model) {
+		@html.include('includes/footer')
+	})
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 	        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 	        crossorigin="anonymous"></script>
