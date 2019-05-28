@@ -1,14 +1,15 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var sassMiddleware = require('node-sass-middleware');
+let createError = require('http-errors');
+let express = require('express');
+let path = require('path');
+let cookieParser = require('cookie-parser');
+let logger = require('morgan');
+let sassMiddleware = require('node-sass-middleware');
 
-// var routes = require('./routes/conf/routes').routes;
 let loadRoutes = require('./routes/loadRoutes').loadRoutes;
 
-var app = express();
+let fileUpload = require('express-fileupload');
+
+let app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,6 +26,14 @@ app.use(sassMiddleware({
 	sourceMap: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(fileUpload({
+	useTempFiles : true,
+	tempFileDir : 'uploads/tmp/',
+	limits: {
+		fileSize: 50 * 1024 * 1024
+	},
+}));
 
 loadRoutes(app);
 

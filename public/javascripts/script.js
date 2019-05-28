@@ -46,11 +46,13 @@ if ('serviceWorker' in navigator) {
 		.catch(error => console.log('Error registering the Service Worker: ' + error));
 }
 
-function setup_home() {
-	setup_default();
-}
+let pages = [
+	'home',
+	'sign_in',
+	'sign_on',
+];
 
-function setup_signon() {
+let setup_default = (after_init = null) =>
 	$(document).ready(() => {
 		$('.parallax').parallax();
 		$('.sidenav').sidenav();
@@ -58,35 +60,24 @@ function setup_signon() {
 			format: 'dd/mm/yyyy'
 		});
 		$('.dropdown-trigger').dropdown();
-		change_label_agreaments(document.querySelector('#nb_agreaments').value);
+		if(after_init !== null) {
+			after_init();
+		}
 	});
-}
 
-function setup_default() {
-	$(document).ready(() => {
-		$('.parallax').parallax();
-		$('.sidenav').sidenav();
-		$('.datepicker').datepicker({
-			format: 'dd/mm/yyyy'
-		});
-		$('.dropdown-trigger').dropdown();
-	});
-}
+let setup_home = setup_sign_in = setup_default;
 
-function setup(page_name) {
-	switch (page_name) {
-		case 'home':
-			setup_home();
-			break;
-		case 'signon':
-			setup_signon();
-			break;
-		default:
-			setup_default();
-			break;
-	}
-}
+let setup_sign_on = () => setup_default(() => {
+	change_label_approvals(document.querySelector('#nb_approvals').value);
 
-function change_label_agreaments(new_value) {
-	document.querySelector('label[for=nb_agreaments]').innerHTML = new_value;
+	// document.querySelector('#sign-on').addEventListener('submit', e => {
+	// 	e.preventDefault();
+	//
+	// })
+});
+
+let setup = page_name => pages.includes(page_name) ? eval(`setup_${page_name}()`) : setup_default();
+
+function change_label_approvals(new_value) {
+	document.querySelector('label[for=nb_approvals]').innerHTML = new_value;
 }
