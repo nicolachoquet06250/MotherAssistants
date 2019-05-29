@@ -3,7 +3,7 @@
 		@{ var home_active = 'active'; }
 	}
 	<li><a href="/home" class="@home_active">Accueil</a></li>
-	@if(model.logged) {
+	@if(model.logged === true) {
 		@if(model.current_page === 'messages') {
 			@{ var messages_active = 'active'; }
 		}
@@ -33,7 +33,7 @@
 				@{ var home_active = 'active'; }
 			}
 			<li><a href="/home" class="@home_active">Accueil</a></li>
-			@if(model.logged) {
+			@if(model.logged === true) {
 				@if(model.current_page === 'messages') {
 					@{ var messages_active = 'active'; }
 				}

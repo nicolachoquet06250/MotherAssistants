@@ -4,6 +4,7 @@ let Employers = require('./Employers');
 module.exports = class extends Entity {
 	get props() {
 		return {
+			_id: 'string',
 			first_name: 'string',
 			last_name: 'string',
 			email: 'string',

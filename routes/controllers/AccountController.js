@@ -3,6 +3,7 @@ module.exports = class Account {
 		this.connector = require('../../modules/database/mongodb_connector');
 		this.pwHelper = require('../../modules/helpers/Passwords');
 		this.Logger = require('../../modules/helpers/Logger');
+		this.Session = require('../../modules/helpers/Session');
 	}
 	static get routes() {
 		return {
@@ -31,17 +32,29 @@ module.exports = class Account {
 	}
 
 	static Home(req, res) {
-		res.render('account/index', { title: 'Account Home', logged: false, app_name: 'MotherAssistants', current_year: (new Date()).getFullYear() });
-	}
-
-	static SignIn(req, res) {
-		res.render('account/signin', {
-			title: 'Account Get Signin',
-			current_page: 'sign_in',
-			logged: false,
+		res.render('account/index', {
+			title: 'Account Home',
+			logged: new Account().Session.Connected(req),
 			app_name: 'MotherAssistants',
 			current_year: (new Date()).getFullYear()
 		});
+	}
+
+	static SignIn(req, res) {
+		let ctrl = new Account();
+		console.log(ctrl.Session.Connected(req));
+		if(ctrl.Session.Connected(req)) {
+			res.redirect('/');
+		}
+		else {
+			res.render('account/signin', {
+				title: 'Account Get Signin',
+				current_page: 'sign_in',
+				logged: ctrl.Session.Connected(req),
+				app_name: 'MotherAssistants',
+				current_year: (new Date()).getFullYear()
+			});
+		}
 	}
 
 	static SignInPost(req, res) {
@@ -50,20 +63,19 @@ module.exports = class Account {
 		if(post.email && post.password) {
 			ctrl.connector.onMongoConnect(client => {
 				let DAO = ctrl.connector.getDao(client, Account.module);
-
 				DAO.get({
 					email: post.email
 				}).then(accounts => {
 					accounts = accounts.map(account => DAO.createEntity(account));
 					if(ctrl.pwHelper.comparePassword(post.password, accounts[0].password)) {
-						req.session.__id = accounts[0]._id;
+						ctrl.Session.SaveAccountSession(req, accounts[0]);
 						res.redirect('/home');
 					}
 					else {
 						res.render('account/signin', {
 							title: 'Account Post Signin',
 							current_page: 'sign_in',
-							logged: false,
+							logged: ctrl.Session.Connected(req),
 							app_name: 'MotherAssistants',
 							error: {
 								message: 'Vous avez entré des identifiants incorrectes'
@@ -75,7 +87,7 @@ module.exports = class Account {
 					res.render('account/signin', {
 						title: 'Account Post Signin',
 						current_page: 'sign_in',
-						logged: false,
+						logged: ctrl.Session.Connected(req),
 						app_name: 'MotherAssistants',
 						error: {
 							message: err
@@ -91,7 +103,7 @@ module.exports = class Account {
 			res.render('account/signin', {
 				title: 'Account Post Signin',
 				current_page: 'sign_in',
-				logged: false,
+				logged: ctrl.Session.Connected(req),
 				app_name: 'MotherAssistants',
 				error: {
 					message: 'Vous n\'avez pas remplis tous le formulaire'
@@ -102,13 +114,19 @@ module.exports = class Account {
 	}
 
 	static SignOn(req, res) {
-		res.render('account/signon', {
-			title: 'Account Get Signon',
-			current_page: 'sign_on',
-			logged: false,
-			app_name: 'MotherAssistants',
-			current_year: (new Date()).getFullYear()
-		});
+		let ctrl = new Account();
+		if(ctrl.Session.Connected(req)) {
+			res.redirect('/');
+		}
+		else {
+			res.render('account/signon', {
+				title: 'Account Get Signon',
+				current_page: 'sign_on',
+				logged: ctrl.Session.Connected(req),
+				app_name: 'MotherAssistants',
+				current_year: (new Date()).getFullYear()
+			});
+		}
 	}
 
 	static SignOnPost(req, res) {
@@ -140,7 +158,7 @@ module.exports = class Account {
 						status: 500,
 						stack: ''
 					},
-					logged: false,
+					logged: ctrl.Session.Connected(req),
 					app_name: 'MotherAssistants',
 					current_year: (new Date()).getFullYear()
 				});
@@ -154,7 +172,7 @@ module.exports = class Account {
 					status: 500,
 					stack: ''
 				},
-				logged: false,
+				logged: ctrl.Session.Connected(req),
 				app_name: 'MotherAssistants',
 				current_year: (new Date()).getFullYear()
 			});
