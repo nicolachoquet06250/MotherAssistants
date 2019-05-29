@@ -9,10 +9,6 @@ module.exports = class extends DAO {
 		return 'accounts';
 	}
 
-	async get(options) {
-		return await this.Collection.find({}).toArray();
-	}
-
 	add(...accounts) {
 		accounts = accounts.map(user => user.json);
 		return new Promise((resolve, reject) => this.Collection.insertMany(accounts, (err, result) => err ? reject(err) : resolve(result)));

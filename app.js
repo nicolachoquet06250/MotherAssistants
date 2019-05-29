@@ -8,6 +8,7 @@ let sassMiddleware = require('node-sass-middleware');
 let loadRoutes = require('./routes/loadRoutes').loadRoutes;
 
 let fileUpload = require('express-fileupload');
+let session = require('express-session');
 
 let app = express();
 
@@ -33,6 +34,16 @@ app.use(fileUpload({
 	limits: {
 		fileSize: 50 * 1024 * 1024
 	},
+}));
+
+app.use(session({
+	secret: 'keyboard cat',
+	resave: false,
+	saveUninitialized: true,
+	cookie: {
+		secure: true,
+		maxAge: 60000
+	}
 }));
 
 loadRoutes(app);

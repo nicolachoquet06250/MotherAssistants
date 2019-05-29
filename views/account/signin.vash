@@ -9,7 +9,7 @@
 							<span class="card-title black-text">Je me connecte</span>
 						</div>
 						<div class="card-content">
-							<form id="sign-in" method="post" action="/" class="row">
+							<form id="sign-in" method="post" action="/account/signIn" class="row">
 								<div class="input-field col s12">
 									<input id="email" name="email" type="email" class="validate" required>
 									<label for="email">Email</label>
@@ -18,6 +18,11 @@
 									<input id="password" name="password" type="password" class="validate" required>
 									<label for="password">Mot de passe</label>
 								</div>
+								@if(model.error) {
+									<div class="col s12">
+										<i class="red-text">@model.error.message</i>
+									</div>
+								}
 							</form>
 						</div>
 						<div class="card-action">

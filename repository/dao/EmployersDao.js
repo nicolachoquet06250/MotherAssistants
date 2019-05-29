@@ -9,10 +9,6 @@ module.exports = class extends DAO {
         return 'employers';
     }
 
-    async get(s_callback, e_callback = null) {
-        return this.Collection.find({}).toArray((err, documents) => err ? (e_callback !== null ? e_callback(err) : null) : s_callback(documents));
-    }
-
     add(...employers) {
         accounts = employers.map(user => user.json);
         return new Promise((resolve, reject) => this.Collection.insertMany(employers, (err, result) => err ? reject(err) : resolve(result)));

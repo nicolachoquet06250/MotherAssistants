@@ -35,15 +35,80 @@ module.exports = class Account {
 	}
 
 	static SignIn(req, res) {
-		res.render('account/signin', { title: 'Account Get Signin', current_page: 'sign_in', logged: false, app_name: 'MotherAssistants', current_year: (new Date()).getFullYear() });
+		res.render('account/signin', {
+			title: 'Account Get Signin',
+			current_page: 'sign_in',
+			logged: false,
+			app_name: 'MotherAssistants',
+			current_year: (new Date()).getFullYear()
+		});
 	}
 
 	static SignInPost(req, res) {
-		res.render('account/signin', { title: 'Account Post Signin', current_page: 'sign_in', logged: false, app_name: 'MotherAssistants', current_year: (new Date()).getFullYear() });
+		let ctrl = new Account();
+		let post = req.body;
+		if(post.email && post.password) {
+			ctrl.connector.onMongoConnect(client => {
+				let DAO = ctrl.connector.getDao(client, Account.module);
+
+				DAO.get({
+					email: post.email
+				}).then(accounts => {
+					accounts = accounts.map(account => DAO.createEntity(account));
+					if(ctrl.pwHelper.comparePassword(post.password, accounts[0].password)) {
+						req.session.__id = accounts[0]._id;
+						res.redirect('/home');
+					}
+					else {
+						res.render('account/signin', {
+							title: 'Account Post Signin',
+							current_page: 'sign_in',
+							logged: false,
+							app_name: 'MotherAssistants',
+							error: {
+								message: 'Vous avez entré des identifiants incorrectes'
+							},
+							current_year: (new Date()).getFullYear()
+						});
+					}
+				}).catch(err => {
+					res.render('account/signin', {
+						title: 'Account Post Signin',
+						current_page: 'sign_in',
+						logged: false,
+						app_name: 'MotherAssistants',
+						error: {
+							message: err
+						},
+						current_year: (new Date()).getFullYear()
+					});
+					res.end();
+				});
+				client.close();
+			});
+		}
+		else {
+			res.render('account/signin', {
+				title: 'Account Post Signin',
+				current_page: 'sign_in',
+				logged: false,
+				app_name: 'MotherAssistants',
+				error: {
+					message: 'Vous n\'avez pas remplis tous le formulaire'
+				},
+				current_year: (new Date()).getFullYear()
+			});
+		}
 	}
 
 	static SignOn(req, res) {
-		res.render('account/signon', { title: 'Account Get Signon', current_page: 'sign_on', logged: false, app_name: 'MotherAssistants', current_year: (new Date()).getFullYear() });
+		res.render('account/signon', {
+			title: 'Account Get Signon',
+			current_page: 'sign_on',
+			logged: false,
+			app_name: 'MotherAssistants',
+			current_year: (new Date()).getFullYear()
+		});
 	}
 
 	static SignOnPost(req, res) {

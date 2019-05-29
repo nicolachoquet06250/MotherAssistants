@@ -11,7 +11,9 @@ module.exports = class DAO {
 		this.Entity = require(`../../repository/entities/${this.entity}`);
 		this.Collection = this.connector.db(this.db_name).collection(this.collection);
 	}
-	get() {}
+	async get(options = {}) {
+		return await this.Collection.find(options).toArray();
+	}
 	add(...elements) {}
 	update(where, newObj) {}
 	delete() {}
