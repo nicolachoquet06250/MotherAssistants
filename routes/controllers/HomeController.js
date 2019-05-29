@@ -6,7 +6,8 @@ module.exports = class Home {
 				'/': Home.home,
 				'/home': Home.home,
 				'/manifest.json': Home.manifest,
-				'/sw.js': Home.serviceWorker
+				'/sw.js': Home.serviceWorker,
+				'/node_modules/materialize-social/materialize-social.css': Home.materializeSocialCss,
 			}
 		}
 	}
@@ -42,7 +43,6 @@ module.exports = class Home {
 		// });
 	}
 
-
 	static manifest(req, res) {
 		let fs = require('fs');
 		res.send(fs.readFileSync(`${__dirname}/../../manifest.json`).toString());
@@ -54,5 +54,11 @@ module.exports = class Home {
 		res.type('application/javascript');
 		res.send(fs.readFileSync(`${__dirname}/../../sw.js`).toString());
 		res.end();
+	}
+
+	static materializeSocialCss(req, res) {
+		let fs = require('fs');
+		res.writeHead(200, {'Content-Type': 'text/css'});
+		res.end(fs.readFileSync(`${__dirname}/../../node_modules/materialize-social/materialize-social.css`).toString());
 	}
 };

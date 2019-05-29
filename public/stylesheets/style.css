@@ -10,4 +10,16 @@ body, html {
 ul a.active {
   background-color: rgba(0, 0, 0, 0.1); }
 
+.my-icon {
+  display: inline-block;
+  background-color: transparent !important;
+  background-size: cover;
+  background-repeat: no-repeat; }
+  .my-icon.facebook {
+    background-image: url("/images/social-network-icons/facebook.png"); }
+  .my-icon.snapchat {
+    background-image: url("/images/social-network-icons/snapchat.png"); }
+  .my-icon.instagram {
+    background-image: url("/images/social-network-icons/instagram.png"); }
+
 /*# sourceMappingURL=style.css.map */

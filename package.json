@@ -16,6 +16,7 @@
     "express": "~4.16.1",
     "express-fileupload": "^1.1.4",
     "http-errors": "~1.6.3",
+    "materialize-social": "^1.0.3",
     "mongodb": "^3.2.6",
     "morgan": "~1.9.1",
     "node-sass-middleware": "0.11.0",
