@@ -1,5 +1,9 @@
 module.exports = class Account {
-
+	constructor() {
+		this.connector = require('../../modules/database/mongodb_connector');
+		this.pwHelper = require('../../modules/helpers/Passwords');
+		this.Logger = require('../../modules/helpers/Logger');
+	}
 	static get routes() {
 		return {
 			get: {
@@ -13,11 +17,9 @@ module.exports = class Account {
 			}
 		}
 	}
-
 	static get module() {
 		return 'account';
 	}
-
 	static get mimes2ext() {
 		return {
 			'image/png': 'png',
@@ -45,7 +47,6 @@ module.exports = class Account {
 	}
 
 	static SignOnPost(req, res) {
-		let Logger = require('../../modules/helpers/Logger');
 		let profile_pic = req.files.profile_pic;
 		let post = req.body;
 		let complete_name = `${req.files.profile_pic.md5}.${Account.mimes2ext[req.files.profile_pic.mimetype]}`;
@@ -55,15 +56,43 @@ module.exports = class Account {
 
 			post['profile_pic'] = complete_name;
 		}
-
-		post.nb_approvals = parseInt(post.nb_approvals);
-		Logger.Console = post;
-		res.render('account/signon', {
-			title: 'Account Post Signon',
-			current_page: 'sign_on',
-			logged: false,
-			app_name: 'MotherAssistants',
-			current_year: (new Date()).getFullYear()
+		let ctrl = new Account();
+		let connector = ctrl.connector;
+		connector.onMongoConnect(client => {
+			let AccountDao = connector.getDao(client, Account.module);
+			if(post.first_name && post.last_name && post.email && post.password && post.nb_approvals) {
+				post.nb_approvals = parseInt(post.nb_approvals);
+				post.password = ctrl.pwHelper.cryptPassword(post.password);
+				let Account = AccountDao.createEntity(post);
+				AccountDao.add(Account).then(() => client.close()).catch(console.error);
+				res.redirect('/account/signIn');
+			}
+			else {
+				res.status(403).render('errors/error', {
+					title: 'Server Error',
+					message: `Le Formulaire n'est pas complet`,
+					error: {
+						status: 500,
+						stack: ''
+					},
+					logged: false,
+					app_name: 'MotherAssistants',
+					current_year: (new Date()).getFullYear()
+				});
+			}
+			client.close();
+		}, err => {
+			res.status(500).render('errors/error', {
+				title: 'Server Error',
+				message: err,
+				error: {
+					status: 500,
+					stack: ''
+				},
+				logged: false,
+				app_name: 'MotherAssistants',
+				current_year: (new Date()).getFullYear()
+			});
 		});
 	}
 };

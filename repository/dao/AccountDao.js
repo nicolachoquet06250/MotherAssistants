@@ -9,8 +9,8 @@ module.exports = class extends DAO {
 		return 'accounts';
 	}
 
-	async get(s_callback, e_callback = null) {
-		return this.Collection.find({}).toArray((err, documents) => err ? (e_callback !== null ? e_callback(err) : null) : s_callback(documents));
+	async get(options) {
+		return await this.Collection.find({}).toArray();
 	}
 
 	add(...accounts) {

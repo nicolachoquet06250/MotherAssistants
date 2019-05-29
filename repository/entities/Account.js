@@ -12,14 +12,15 @@ module.exports = class extends Entity {
 			employers: 'Employers',
 			messages: 'Message[]',
 			children: 'Child[]',
-			max_number_places: 'integer'
+			nb_approvals: 'integer',
+			profile_pic: 'string',
 		};
 	}
 
-	constructor(connector, dbname) {
-		super(connector, dbname);
+	constructor(connector, db_name) {
+		super(connector, db_name);
 		super.messages = [];
-		super.employers = new Employers(connector, dbname);
+		super.employers = new Employers(connector, db_name);
 		super.children = [];
 	}
 };
