@@ -11,6 +11,7 @@
 						<div class="card-image">
 							<img src="/images/places-maxi-assistante-maternelle.png" />
 							<span class="card-title black-text">Mon compte</span>
+							<span class="card-title black-text"><a href="/account/signout">Se déconnecter</a></span>
 						</div>
 						<div class="row profile-pic-container">
 							<div class="col offset-s7 s4 offset-m8 m3 offset-l8 l3" style="height: 100%;">
