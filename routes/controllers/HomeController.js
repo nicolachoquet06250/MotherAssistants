@@ -11,6 +11,7 @@ module.exports = class Home {
 			get: {
 				'/': Home.home,
 				'/home': Home.home,
+				'/contacts': Home.contacts,
 				'/manifest.json': Home.manifest,
 				'/sw.js': Home.serviceWorker,
 				'/node_modules/materialize-social/materialize-social.css': Home.materializeSocialCss,
@@ -32,6 +33,13 @@ module.exports = class Home {
 			})
 			.append('current_page', 'home')
 			.append('logged', new Home().Session.Connected(req)).object);
+	}
+
+	static contacts(req, res) {
+		res.render('home/contacts', options.BaseOptions
+			.append('title', 'Contactez nous')
+			.append('current_page', 'contacts')
+			.append('logged', new Home().Session.Connected(req)).object)
 	}
 
 	static manifest(req, res) {

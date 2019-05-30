@@ -27,6 +27,10 @@
 		}
 		<li><a href="/account/signOn" class="@signon_active">Je m'inscris</a></li>
 	}
+	@if(model.current_page === 'contacts') {
+		@{ var contacts_active = 'active'; }
+	}
+	<li><a href="/contacts" class="@contacts_active">Contacts</a></li>
 </ul>
 <nav>
 	<div class="nav-wrapper">
@@ -61,6 +65,10 @@
 				}
 				<li><a href="/account/signOn" class="@signon_active">Je m'inscris</a></li>
 			}
+			@if(model.current_page === 'contacts') {
+				@{ var contacts_active = 'active'; }
+			}
+			<li><a href="/contacts" class="@contacts_active">Contacts</a></li>
 		</ul>
 	</div>
 </nav>

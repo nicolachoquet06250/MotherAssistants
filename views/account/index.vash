@@ -1,17 +1,17 @@
 @html.extend('layout', function(model) {
 	@html.block('content', function(model) {
-		<script>
-			let user = "@model.user";
-			console.log(user);
-		</script>
 		<div class="container">
 			<div class="row">
 				<div class="col s12 offset-l1 l10">
 					<div class="card">
 						<div class="card-image">
 							<img src="/images/places-maxi-assistante-maternelle.png" />
-							<span class="card-title black-text">Mon compte</span>
-							<span class="card-title black-text"><a href="/account/signout">Se déconnecter</a></span>
+							<span class="card-title black-text">
+								Mon compte
+								<a href="/account/signout" class="black-text">
+									<i class="material-icons" style="font-size: 30px; margin-top: 10px;">power_settings_new</i>
+								</a>
+							</span>
 						</div>
 						<div class="row profile-pic-container">
 							<div class="col offset-s7 s4 offset-m8 m3 offset-l8 l3" style="height: 100%;">

@@ -27,7 +27,6 @@ div.profile-pic {
   border: 1px solid black;
   position: relative;
   margin-top: -150px;
-  z-index: 999;
   width: 100%; }
 
 /*# sourceMappingURL=style.css.map */

@@ -1,0 +1,11 @@
+@html.extend('layout', function(model) {
+	@html.block('content', function(model) {
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col s12">
+					Contacts
+				</div>
+			</div>
+		</div>
+	})
+})
