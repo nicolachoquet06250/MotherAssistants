@@ -1,5 +1,10 @@
+let options = require('../../modules/helpers/ViewOptions');
+
 module.exports = class Children {
 
+	constructor() {
+		this.Session = require('../../modules/helpers/Session');
+	}
 	static get routes() {
 		return {
 			get: {
@@ -20,18 +25,24 @@ module.exports = class Children {
 	}
 
 	static Home(req, res) {
-		res.render('children/index', { title: 'Children Home' });
+		res.render('children/index', options.BaseOptions
+				.append('title', 'Children Home').object);
 	}
 
 	static Son(req, res) {
-		res.render('children/son', { title: 'Children Son' });
+		res.render('children/son', options.BaseOptions
+			.append('title', 'Children Son').object);
 	}
 
 	static Daughter(req, res) {
-		res.render('children/daughter', { title: 'Children Daughter' });
+		res.render('children/daughter', options.BaseOptions
+			.append('title', 'Children Daughter').object);
 	}
 
 	static Diary(req, res) {
-		res.render('children/diary', { title: 'Children Diary', current_page: 'diary', logged: false })
+		res.render('children/diary', options.BaseOptions
+			.append('title', 'Children Diary')
+			.append('current_page', 'diary')
+			.append('logged', new Children().Session.Connected(req)).object)
 	}
 };

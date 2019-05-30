@@ -4,6 +4,10 @@
 	}
 	<li><a href="/home" class="@home_active">Accueil</a></li>
 	@if(model.logged === true) {
+		@if(model.current_page === 'account') {
+			@{ var account_active = 'active'; }
+		}
+		<li><a href="/account" class="@account_active">Mon compte</a></li>
 		@if(model.current_page === 'messages') {
 			@{ var messages_active = 'active'; }
 		}
@@ -34,6 +38,10 @@
 			}
 			<li><a href="/home" class="@home_active">Accueil</a></li>
 			@if(model.logged === true) {
+				@if(model.current_page === 'account') {
+					@{ var account_active = 'active'; }
+				}
+				<li><a href="/account" class="@account_active">Mon compte</a></li>
 				@if(model.current_page === 'messages') {
 					@{ var messages_active = 'active'; }
 				}

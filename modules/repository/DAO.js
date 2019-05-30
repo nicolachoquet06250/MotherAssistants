@@ -1,3 +1,4 @@
+let ObjectID = require("mongodb").ObjectID;
 module.exports = class DAO {
 	get collection() {
 		return '';
@@ -12,6 +13,9 @@ module.exports = class DAO {
 		this.Collection = this.connector.db(this.db_name).collection(this.collection);
 	}
 	async get(options = {}) {
+		if('_id' in options) {
+			options._id = new ObjectID(options._id);
+		}
 		return await this.Collection.find(options).toArray();
 	}
 	add(...elements) {}

@@ -1,6 +1,33 @@
 @html.extend('layout', function(model) {
 	@html.block('content', function(model) {
-		<h1>@model.title</h1>
-		<p>Welcome to @model.title</p>
+		<script>
+			let user = "@model.user";
+			console.log(user);
+		</script>
+		<div class="container">
+			<div class="row">
+				<div class="col s12 offset-l1 l10">
+					<div class="card">
+						<div class="card-image">
+							<img src="/images/places-maxi-assistante-maternelle.png" />
+							<span class="card-title black-text">Mon compte</span>
+						</div>
+						<div class="row profile-pic-container">
+							<div class="col offset-s7 s4 offset-m8 m3 offset-l8 l3" style="height: 100%;">
+								@if(model.user && model.user.profile_pic !== null) {
+									<div class="profile-pic" style="background-image: url('/uploads/@model.user.profile_pic');"></div>
+								}
+								else {
+									<div class="profile-pic" style="background-image: url('/images/default_profile_pic.png');"></div>
+								}
+							</div>
+						</div>
+						<div class="card-content">
+							<p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	})
 })

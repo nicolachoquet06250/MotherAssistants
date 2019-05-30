@@ -50,6 +50,7 @@ let pages = [
 	'home',
 	'sign_in',
 	'sign_on',
+	'account'
 ];
 
 let setup_default = (after_init = null) =>
@@ -70,11 +71,14 @@ let setup_sign_in = () => setup_default();
 
 let setup_sign_on = () => setup_default(() => {
 	change_label_approvals(document.querySelector('#nb_approvals').value);
+});
 
-	// document.querySelector('#sign-on').addEventListener('submit', e => {
-	// 	e.preventDefault();
-	//
-	// })
+let setup_account = () => setup_default(() => {
+	let profile_pic_resize = () => document.querySelector('.profile-pic').style.height = document.querySelector('.profile-pic').offsetWidth + 'px';
+	profile_pic_resize();
+	window.onresize = () => {
+		profile_pic_resize();
+	}
 });
 
 let setup = page_name => pages.includes(page_name) ? eval(`setup_${page_name}()`) : setup_default();

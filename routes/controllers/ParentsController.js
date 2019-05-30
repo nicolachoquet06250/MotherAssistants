@@ -1,4 +1,10 @@
+let options = require('../../modules/helpers/ViewOptions');
+
 module.exports = class Parents {
+
+	constructor() {
+		this.Session = require('../../modules/helpers/Session');
+	}
 
 	static get routes() {
 		return {
@@ -20,18 +26,25 @@ module.exports = class Parents {
 	}
 
 	static Home(req, res) {
-		res.render('parents/index', { title: 'Parents Home' });
+		res.render('parents/index', options.BaseOptions
+			.append('title', 'Parents Home').object);
 	}
 
 	static Mother(req, res) {
-		res.render('parents/mother', { title: 'Parents Mother' });
+		res.render('parents/mother', options.BaseOptions
+			.append('title', 'Parents Mother').object);
 	}
 
 	static Father(req, res) {
-		res.render('parents/father', { title: 'Parents Father' });
+		res.render('parents/father', options.BaseOptions
+			.append('title', 'Parents Father').object);
 	}
 
 	static Messages(req, res) {
-		res.render('parents/messages', { title: 'Parents Messages', current_page: 'messages', logged: false })
+		res.render('parents/messages', options.BaseOptions
+			.append('title', 'Parents Messages')
+			.append('current_page', 'messages')
+			.append('logged', new Parents().Session.Connected(req))
+			.object)
 	}
 };

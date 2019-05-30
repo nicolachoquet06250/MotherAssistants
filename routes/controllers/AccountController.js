@@ -1,8 +1,9 @@
+let options = require('../../modules/helpers/ViewOptions');
+
 module.exports = class Account {
 	constructor() {
 		this.connector = require('../../modules/database/mongodb_connector');
 		this.pwHelper = require('../../modules/helpers/Passwords');
-		this.Logger = require('../../modules/helpers/Logger');
 		this.Session = require('../../modules/helpers/Session');
 	}
 	static get routes() {
@@ -10,7 +11,8 @@ module.exports = class Account {
 			get: {
 				'/': Account.Home,
 				'/signIn': Account.SignIn,
-				'/signOn': Account.SignOn
+				'/signOn': Account.SignOn,
+				'/signOut': Account.Signout
 			},
 			post: {
 				'/signIn': Account.SignInPost,
@@ -32,29 +34,37 @@ module.exports = class Account {
 	}
 
 	static Home(req, res) {
-		res.render('account/index', {
-			title: 'Account Home',
-			logged: new Account().Session.Connected(req),
-			app_name: 'MotherAssistants',
-			current_year: (new Date()).getFullYear()
-		});
+		let ctrl = new Account();
+		if(ctrl.Session.Connected(req)) {
+			ctrl.connector.onMongoConnect(client => {
+				let DAO = ctrl.connector.getDao(client, Account.module);
+
+				DAO.get({_id: req.session.__id}).then(accounts => {
+					res.render('account/index', options.BaseOptions
+						.append('title', 'Mon compte')
+						.append('current_page', 'account')
+						.append('user', accounts.map(account => DAO.createEntity(account))[0])
+						.append('logged', ctrl.Session.Connected(req))
+						.object);
+				}, () => res.redirect('/home'));
+			});
+		}
+		else res.redirect('/home')
 	}
 
 	static SignIn(req, res) {
 		let ctrl = new Account();
-		console.log(ctrl.Session.Connected(req));
-		if(ctrl.Session.Connected(req)) {
-			res.redirect('/');
-		}
-		else {
-			res.render('account/signin', {
-				title: 'Account Get Signin',
-				current_page: 'sign_in',
-				logged: ctrl.Session.Connected(req),
-				app_name: 'MotherAssistants',
-				current_year: (new Date()).getFullYear()
-			});
-		}
+		if(ctrl.Session.Connected(req)) res.redirect('/');
+		else res.render('account/signin', options.BaseOptions
+				.append('title', 'Account Get Signin')
+				.append('current_page', 'sign_in')
+				.append('logged', ctrl.Session.Connected(req))
+				.object);
+	}
+
+	static Signout(req, res) {
+		delete req.session.__id;
+		res.redirect('/home');
 	}
 
 	static SignInPost(req, res) {
@@ -63,80 +73,60 @@ module.exports = class Account {
 		if(post.email && post.password) {
 			ctrl.connector.onMongoConnect(client => {
 				let DAO = ctrl.connector.getDao(client, Account.module);
-				DAO.get({
-					email: post.email
-				}).then(accounts => {
-					accounts = accounts.map(account => DAO.createEntity(account));
-					if(ctrl.pwHelper.comparePassword(post.password, accounts[0].password)) {
+				DAO.get({ email: post.email }).then(accounts => {
+					accounts = accounts.map(
+						account => DAO.createEntity(account));
+					if(ctrl.pwHelper
+						.comparePassword(post.password, accounts[0].password)) {
 						ctrl.Session.SaveAccountSession(req, accounts[0]);
 						res.redirect('/home');
 					}
-					else {
-						res.render('account/signin', {
-							title: 'Account Post Signin',
-							current_page: 'sign_in',
-							logged: ctrl.Session.Connected(req),
-							app_name: 'MotherAssistants',
-							error: {
+					else res.render('account/signin', options.BaseOptions
+							.append('title', 'Account Post Signin')
+							.append('current_page', 'sign_in')
+							.append('logged', ctrl.Session.Connected(req))
+							.add_error({
 								message: 'Vous avez entré des identifiants incorrectes'
-							},
-							current_year: (new Date()).getFullYear()
-						});
-					}
+							}).object);
 				}).catch(err => {
-					res.render('account/signin', {
-						title: 'Account Post Signin',
-						current_page: 'sign_in',
-						logged: ctrl.Session.Connected(req),
-						app_name: 'MotherAssistants',
-						error: {
-							message: err
-						},
-						current_year: (new Date()).getFullYear()
-					});
+					res.render('account/signin', options.BaseOptions
+						.append('title', 'Account Post Signin')
+						.append('current_page', 'sign_in')
+						.append('logged', ctrl.Session.Connected(req))
+						.add_error({ message: err }).object);
 					res.end();
 				});
 				client.close();
 			});
 		}
-		else {
-			res.render('account/signin', {
-				title: 'Account Post Signin',
-				current_page: 'sign_in',
-				logged: ctrl.Session.Connected(req),
-				app_name: 'MotherAssistants',
-				error: {
-					message: 'Vous n\'avez pas remplis tous le formulaire'
-				},
-				current_year: (new Date()).getFullYear()
-			});
-		}
+		else
+			res.render('account/signin', options.BaseOptions
+				.append('title', 'Account Post Signin')
+				.append('current_page', 'sign_in')
+				.append('logged', ctrl.Session.Connected(req))
+				.add_error({
+					message: `'Vous n'avez pas remplis tous le formulaire'`
+				}).object);
 	}
 
 	static SignOn(req, res) {
 		let ctrl = new Account();
-		if(ctrl.Session.Connected(req)) {
-			res.redirect('/');
-		}
-		else {
-			res.render('account/signon', {
-				title: 'Account Get Signon',
-				current_page: 'sign_on',
-				logged: ctrl.Session.Connected(req),
-				app_name: 'MotherAssistants',
-				current_year: (new Date()).getFullYear()
-			});
-		}
+		if(ctrl.Session.Connected(req)) res.redirect('/');
+		else res.render('account/signon', options.BaseOptions
+				.append('title', 'Account Get Signon')
+				.append('current_page', 'sign_on')
+				.append('logged', ctrl.Session.Connected(req))
+				.object);
 	}
 
 	static SignOnPost(req, res) {
 		let profile_pic = req.files.profile_pic;
 		let post = req.body;
-		let complete_name = `${req.files.profile_pic.md5}.${Account.mimes2ext[req.files.profile_pic.mimetype]}`;
+		let complete_name =
+			    `${req.files.profile_pic.md5}.${Account.mimes2ext[req.files.profile_pic.mimetype]}`;
 		if(profile_pic.name.length > 0) {
 			profile_pic.mv(`${__dirname}/../../uploads/${req.files.profile_pic.md5}.${Account.mimes2ext[req.files.profile_pic.mimetype]}`,
 				() => {});
-
 			post['profile_pic'] = complete_name;
 		}
 		let ctrl = new Account();
@@ -150,32 +140,20 @@ module.exports = class Account {
 				AccountDao.add(Account).then(() => client.close()).catch(console.error);
 				res.redirect('/account/signIn');
 			}
-			else {
-				res.status(403).render('errors/error', {
-					title: 'Server Error',
-					message: `Le Formulaire n'est pas complet`,
-					error: {
-						status: 500,
-						stack: ''
-					},
-					logged: ctrl.Session.Connected(req),
-					app_name: 'MotherAssistants',
-					current_year: (new Date()).getFullYear()
-				});
-			}
+			else res.status(403).render('errors/error', options.BaseOptions
+					.append('title', 'Forbidden')
+					.append('current_page', 'sign_on')
+					.append('logged', ctrl.Session.Connected(req))
+					.append('message', `Le Formulaire n'est pas complet`)
+					.add_error({ status: 403, stack: '' }).object);
 			client.close();
-		}, err => {
-			res.status(500).render('errors/error', {
-				title: 'Server Error',
-				message: err,
-				error: {
-					status: 500,
-					stack: ''
-				},
-				logged: ctrl.Session.Connected(req),
-				app_name: 'MotherAssistants',
-				current_year: (new Date()).getFullYear()
-			});
-		});
+		}, () =>
+			res.status(500).render('errors/error', options.BaseOptions
+				.append('title', 'Server Error')
+				.append('current_page', 'sign_on')
+				.append('logged', ctrl.Session.Connected(req))
+				.append('message', `Le Formulaire n'est pas complet`)
+				.add_error({ status: 500, stack: '' }).object)
+		);
 	}
 };

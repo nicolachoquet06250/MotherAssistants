@@ -1,3 +1,5 @@
+let options = require('../../modules/helpers/ViewOptions');
+
 module.exports = class Home {
 
 	constructor() {
@@ -21,36 +23,30 @@ module.exports = class Home {
 	}
 
 	static home(req, res) {
-		res.render('home/index', {
-			title: 'Mother-Assistants',
-			app: {
+		res.render('home/index', options.BaseOptions
+			.append('title', 'Mother-Assistants')
+			.append('app', {
 				presentation: [`Cette application vous servira à répertorier les enfants que vous gardez à un seul endroit, ainsi que leur parents et les informations qui les concernent.`,
 					`ainsi, vous pourez communiquer avec les parents sur l'application, poster des photos accessibles par les 2 parents, ainsi que noter les différents activitées pratiqués la journée, les repas, les besoins, etc`,
 					`tout ça sous forme de calandrier, ce qui rend plus simple la recherche d'un évenement en particulier `]
-			},
-			current_page: 'home',
-			logged: new Home().Session.Connected(req),
-			app_name: 'MotherAssistants',
-			current_year: (new Date()).getFullYear()
-		});
+			})
+			.append('current_page', 'home')
+			.append('logged', new Home().Session.Connected(req)).object);
 	}
 
 	static manifest(req, res) {
-		let fs = require('fs');
-		res.send(fs.readFileSync(`${__dirname}/../../manifest.json`).toString());
+		res.send(require('fs').readFileSync(`${__dirname}/../../manifest.json`).toString());
 		res.end();
 	}
 
 	static serviceWorker(req, res) {
-		let fs = require('fs');
 		res.type('application/javascript');
-		res.send(fs.readFileSync(`${__dirname}/../../sw.js`).toString());
+		res.send(require('fs').readFileSync(`${__dirname}/../../sw.js`).toString());
 		res.end();
 	}
 
 	static materializeSocialCss(req, res) {
-		let fs = require('fs');
 		res.writeHead(200, {'Content-Type': 'text/css'});
-		res.end(fs.readFileSync(`${__dirname}/../../node_modules/materialize-social/materialize-social.css`).toString());
+		res.end(require('fs').readFileSync(`${__dirname}/../../node_modules/materialize-social/materialize-social.css`).toString());
 	}
 };

@@ -22,4 +22,12 @@ ul a.active {
   .my-icon.instagram {
     background-image: url("/images/social-network-icons/instagram.png"); }
 
+div.profile-pic {
+  background-size: cover;
+  border: 1px solid black;
+  position: relative;
+  margin-top: -150px;
+  z-index: 999;
+  width: 100%; }
+
 /*# sourceMappingURL=style.css.map */
