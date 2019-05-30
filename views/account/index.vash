@@ -24,7 +24,37 @@
 							</div>
 						</div>
 						<div class="card-content">
-							<p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
+							<form id="sign-on" method="post" action="/account/signOn" enctype="multipart/form-data" class="row">
+								<div class="input-field col s12 m6">
+									<input id="last_name" name="last_name" type="text" class="validate" required>
+									<label for="last_name">Nom</label>
+								</div>
+								<div class="input-field col s12 m6">
+									<input id="first_name" name="first_name" type="text" class="validate" required>
+									<label for="first_name">Prénom</label>
+								</div>
+								<div class="input-field col s12">
+									<input id="email" name="email" type="email" class="validate" required>
+									<label for="email">Email</label>
+								</div>
+								<div class="input-field col s12 m6">
+									<input id="password" name="password" type="password" class="validate" required>
+									<label for="password">Mot de passe</label>
+								</div>
+								<div class="input-field col s12 m6">
+									<input id="check_password" type="password" class="validate" required>
+									<label for="check_password">Vérification du mot de passe</label>
+								</div>
+								<div class="input-field col s12">
+									<input id="birth_day" name="birth_day" type="text" class="datepicker validate" required>
+									<label for="birth_day">Date de naissance</label>
+								</div>
+								<div class="input-field col s12">
+									<input id="nb_approvals" name="nb_approvals" type="range" min="1" max="4" value="1"
+									       onchange="change_label_approvals(this.value)" required>
+									<label for="nb_approvals" style="margin-top: -20px;"></label>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>

@@ -48,7 +48,6 @@
 										<input class="file-path validate" type="text" placeholder="votre photo de profile">
 									</div>
 								</div>
-<!--								<input type="submit" id="submit-sign-on" style="display: none;" />-->
 							</form>
 						</div>
 						<div class="card-action">
