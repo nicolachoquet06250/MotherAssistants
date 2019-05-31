@@ -8,6 +8,10 @@
 			@{ var account_active = 'active'; }
 		}
 		<li><a href="/account" class="@account_active">Mon compte</a></li>
+		@if(model.current_page === 'children') {
+			@{ var children_active = 'active'; }
+		}
+		<li><a href="/children" class="@children_active">Mes enfants</a></li>
 		@if(model.current_page === 'messages') {
 			@{ var messages_active = 'active'; }
 		}
@@ -46,6 +50,10 @@
 					@{ var account_active = 'active'; }
 				}
 				<li><a href="/account" class="@account_active">Mon compte</a></li>
+				@if(model.current_page === 'children') {
+					@{ var children_active = 'active'; }
+				}
+				<li><a href="/children" class="@children_active">Mes enfants</a></li>
 				@if(model.current_page === 'messages') {
 					@{ var messages_active = 'active'; }
 				}

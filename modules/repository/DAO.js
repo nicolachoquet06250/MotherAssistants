@@ -12,11 +12,11 @@ module.exports = class DAO {
 		this.Entity = require(`../../repository/entities/${this.entity}`);
 		this.Collection = this.connector.db(this.db_name).collection(this.collection);
 	}
-	async get(options = {}) {
+	async get(options = {}, options2 = null) {
 		if('_id' in options) {
 			options._id = new ObjectID(options._id);
 		}
-		return await this.Collection.find(options).toArray();
+		return (options2 === null ? this.Collection.find(options) : this.Collection.find(options, options2)).toArray();
 	}
 	add(...elements) {}
 	update(where, newObj) {}

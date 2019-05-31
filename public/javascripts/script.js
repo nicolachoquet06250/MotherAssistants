@@ -50,39 +50,72 @@ let pages = [
 	'home',
 	'sign_in',
 	'sign_on',
-	'account'
+	'account',
+	'children'
 ];
 
 let setup_default = (after_init = null) =>
 	$(document).ready(() => {
 		$('.parallax').parallax();
 		$('.sidenav').sidenav();
-		$('.datepicker').datepicker({
-			format: 'dd/mm/yyyy'
-		});
 		$('.dropdown-trigger').dropdown();
 		if(after_init !== null) {
 			after_init();
 		}
 		$('.loader:first').fadeOut(3000, () =>  $('html').css('overflow-y', 'auto'));
 	});
-
 let setup_home = () => setup_default();
-let setup_sign_in = () => setup_default();
-
+let setup_sign_in = () => setup_default(() => {
+	$('.datepicker').datepicker({
+		format: 'dd/mm/yyyy'
+	});
+});
 let setup_sign_on = () => setup_default(() => {
 	change_label_approvals(document.querySelector('#nb_approvals').value);
+	$('.datepicker').datepicker({
+		format: 'dd/mm/yyyy'
+	});
 });
-
 let setup_account = () => setup_default(() => {
 	let profile_pic_resize = () => document.querySelector('.profile-pic').style.height = document.querySelector('.profile-pic').offsetWidth + 'px';
 	profile_pic_resize();
 	change_label_approvals(document.querySelector('#nb_approvals').value);
+	$('.datepicker').datepicker({
+		format: 'dd/mm/yyyy'
+	});
 	window.onresize = () => {
 		profile_pic_resize();
-	}
+	};
 });
+let setup_children = () => setup_default(() => {
+	$('.modal').modal();
 
+	let generate_password = (nb_chars_in_password) => {
+		let chars = 'abcdefghijklmnopqrstuvwxyz0123456789.!?$*&~#|';
+
+		let password = '';
+		for(let i = 0; i < nb_chars_in_password; i++) {
+			password += chars.substr((Math.floor(Math.random() * chars.length - 1)), 1);
+		}
+
+		return password;
+	};
+
+	$('.modal .generate-password').each((key, btn) => {
+		$(btn).on('click', () => {
+			let btn_container = $(btn).parent();
+			let For = $(btn).attr('id').split('_')[2];
+			$(btn).remove();
+			btn_container.append(
+				'<input type="text" value="' + generate_password(10) + '" name="generated_password_for_' + For + '" class="validate valid" id="generated_password_for_' + For + '" readonly>' +
+				'<label for="generated_password_for_' + For + '" class="active">Mot de passe généré</label>'
+			);
+		});
+	});
+
+	// $('.add-child').on('submit', e => {
+	// 	e.preventDefault();
+	// })
+});
 let setup = page_name => pages.includes(page_name) ? eval(`setup_${page_name}()`) : setup_default();
-
 let change_label_approvals = new_value => document.querySelector('label[for=nb_approvals]').innerHTML = new_value;

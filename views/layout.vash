@@ -28,11 +28,11 @@
 	@html.block('additional_css')
 </head>
 <body>
-		<div class="loader red">
-			@html.block('loader', function(model) {
-				@html.include('includes/loader')
-			})
-		</div>
+	<div class="loader red">
+		@html.block('loader', function(model) {
+			@html.include('includes/loader')
+		})
+	</div>
 	<header>
 		@html.block('menu', function(model) {
 			@html.include('includes/menus/top_menu')
@@ -40,6 +40,9 @@
 	</header>
 	<main>
 		@html.block('content')
+		<div class="modal-container">
+			@html.block('modals')
+		</div>
 	</main>
 	@html.block('footer', function(model) {
 		@html.include('includes/footer')

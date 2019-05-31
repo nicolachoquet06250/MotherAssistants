@@ -4,6 +4,7 @@ module.exports = class Children {
 
 	constructor() {
 		this.Session = require('../../modules/helpers/Session');
+		this.connector = require('../../modules/database/mongodb_connector');
 	}
 	static get routes() {
 		return {
@@ -14,19 +15,79 @@ module.exports = class Children {
 				'/diary': Children.Diary
 			},
 			post: {
+				'/add': Children.AddChild,
 				'/son': Children.Son,
 				'/daughter': Children.Daughter,
 			}
 		}
 	}
-
 	static get module() {
 		return 'children';
 	}
 
 	static Home(req, res) {
-		res.render('children/index', options.BaseOptions
-				.append('title', 'Children Home').object);
+		let ctrl = new Children();
+		if(!ctrl.Session.Connected(req)) res.redirect('/home');
+		else {
+			ctrl.connector.onMongoConnect(client => {
+				let DAO = ctrl.connector.getDao(client, 'account');
+
+				DAO.get({
+					_id: req.session.__id
+				}, { children: 1 }).then(accounts => {
+					let me = accounts.map(account => DAO.createEntity(account).json)[0];
+					res.render('children/index', options.BaseOptions
+						.append('title', 'Mes enfants')
+						.append('children', me.children)
+						.append('current_page', 'children')
+						.append('logged', ctrl.Session.Connected(req)).object);
+				});
+			});
+		}
+	}
+
+	static AddChild(req, res) {
+		let ctrl = new Children();
+		if(!ctrl.Session.Connected(req)) res.redirect('/home');
+		else {
+			ctrl.connector.onMongoConnect(client => {
+				let AccountDAO = ctrl.connector.getDao(client, 'account');
+				let post = req.body;
+				AccountDAO.get({ _id: req.session.__id }).then(accounts => {
+					let child = ctrl.connector.getDao(client, 'child').createEntity({
+						first_name: post.first_name,
+						last_name: post.last_name,
+						birth_day: post.birth_day
+					});
+
+					let Familly = ctrl.connector.getDao(client, 'employers').createEntity();
+					Familly.mother = ctrl.connector.getDao(client, 'parent').createEntity({
+						first_name: post.mother_first_name,
+						last_name: post.mother_last_name,
+						phone: post.mother_phone,
+						password: post.generated_password_for_mother
+					});
+					Familly.father = ctrl.connector.getDao(client, 'parent').createEntity({
+						first_name: post.father_first_name,
+						last_name: post.father_last_name,
+						phone: post.father_phone,
+						password: post.generated_password_for_father
+					});
+					child.family = Familly.json;
+
+					let me = accounts.map(account => AccountDAO.createEntity(account))[0];
+					me.children.push(child.json);
+
+					AccountDAO.update({ _id: req.session.__id}, { children: child.json }, false, true, r => {
+						client.close();
+						res.redirect('/children');
+					}, err => {
+						console.error(err);
+						client.close();
+					});
+				});
+			});
+		}
 	}
 
 	static Son(req, res) {

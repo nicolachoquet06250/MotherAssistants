@@ -1,4 +1,5 @@
 let DAO = require('../../modules/repository/DAO');
+let ObjectID = require("mongodb").ObjectID;
 
 module.exports = class extends DAO {
 	get entity() {
@@ -14,9 +15,13 @@ module.exports = class extends DAO {
 		return new Promise((resolve, reject) => this.Collection.insertMany(accounts, (err, result) => err ? reject(err) : resolve(result)));
 	}
 
-	update(where, updatedAccount, forceOne = false, s_callback = null, e_callback = null) {
+	update(where, updatedAccount, forceOne = false, increment_array = false, s_callback = null, e_callback = null) {
+		if('_id' in where) {
+			where._id = new ObjectID(where._id);
+		}
 		let callback = (err, res) => err ? (e_callback !== null ? e_callback(err) : null) : (s_callback !== null ? s_callback(res) : null);
-		let updateObject = { $set: updatedAccount };
+		let updateObject = increment_array ? { $push: updatedAccount } : { $set: updatedAccount };
+		console.log(where, updateObject);
 		forceOne ? this.Collection.updateOne(where, updateObject, callback) : this.Collection.updateMany(where, updateObject, callback);
 	}
 
