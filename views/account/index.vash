@@ -8,7 +8,7 @@
 							<img src="/images/places-maxi-assistante-maternelle.png" />
 							<span class="card-title black-text">
 								Mon compte
-								<a href="/account/signout" class="black-text">
+								<a href="/account/signout" class="black-text logout-btn">
 									<i class="material-icons" style="font-size: 30px; margin-top: 10px;">power_settings_new</i>
 								</a>
 							</span>
@@ -26,15 +26,15 @@
 						<div class="card-content">
 							<form id="sign-on" method="post" action="/account/signOn" enctype="multipart/form-data" class="row">
 								<div class="input-field col s12 m6">
-									<input id="last_name" name="last_name" type="text" class="validate" required>
+									<input id="last_name" name="last_name" value="@model.user.last_name" type="text" class="validate" required>
 									<label for="last_name">Nom</label>
 								</div>
 								<div class="input-field col s12 m6">
-									<input id="first_name" name="first_name" type="text" class="validate" required>
+									<input id="first_name" name="first_name" value="@model.user.first_name" type="text" class="validate" required>
 									<label for="first_name">Prénom</label>
 								</div>
 								<div class="input-field col s12">
-									<input id="email" name="email" type="email" class="validate" required>
+									<input id="email" name="email" value="@model.user.email" type="email" class="validate" required>
 									<label for="email">Email</label>
 								</div>
 								<div class="input-field col s12 m6">
@@ -46,13 +46,16 @@
 									<label for="check_password">Vérification du mot de passe</label>
 								</div>
 								<div class="input-field col s12">
-									<input id="birth_day" name="birth_day" type="text" class="datepicker validate" required>
+									<input id="birth_day" name="birth_day" value="@model.user.birth_day" type="text" class="datepicker validate" required>
 									<label for="birth_day">Date de naissance</label>
 								</div>
 								<div class="input-field col s12">
-									<input id="nb_approvals" name="nb_approvals" type="range" min="1" max="4" value="1"
+									<input id="nb_approvals" name="nb_approvals" type="range" min="1" max="4" value="@model.user.nb_approvals"
 									       onchange="change_label_approvals(this.value)" required>
 									<label for="nb_approvals" style="margin-top: -20px;"></label>
+								</div>
+								<div class="input-field col s12">
+									<input type="submit" class="btn btn-flat" value="Sauvegarder" />
 								</div>
 							</form>
 						</div>

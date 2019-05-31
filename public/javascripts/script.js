@@ -77,6 +77,7 @@ let setup_sign_on = () => setup_default(() => {
 let setup_account = () => setup_default(() => {
 	let profile_pic_resize = () => document.querySelector('.profile-pic').style.height = document.querySelector('.profile-pic').offsetWidth + 'px';
 	profile_pic_resize();
+	change_label_approvals(document.querySelector('#nb_approvals').value);
 	window.onresize = () => {
 		profile_pic_resize();
 	}
