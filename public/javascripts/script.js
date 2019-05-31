@@ -64,6 +64,7 @@ let setup_default = (after_init = null) =>
 		if(after_init !== null) {
 			after_init();
 		}
+		$('.loader:first').fadeOut(3000, () =>  $('html').css('overflow-y', 'auto'));
 	});
 
 let setup_home = () => setup_default();
