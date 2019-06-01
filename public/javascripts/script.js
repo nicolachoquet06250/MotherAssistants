@@ -113,9 +113,15 @@ let setup_children = () => setup_default(() => {
 		});
 	});
 
-	// $('.add-child').on('submit', e => {
-	// 	e.preventDefault();
-	// })
+	window.delete_child = () => {
+		document.querySelector('#form_delete_child').submit();
+		console.log(document.querySelector('#are_you_sure').getAttribute('data-id'));
+	};
+
+	window.add_id_to_modal = id => {
+		document.querySelector('#are_you_sure').setAttribute('data-id', id);
+		document.querySelector('#hidden_child_id').value = id;
+	};
 });
 let setup = page_name => pages.includes(page_name) ? eval(`setup_${page_name}()`) : setup_default();
 let change_label_approvals = new_value => document.querySelector('label[for=nb_approvals]').innerHTML = new_value;

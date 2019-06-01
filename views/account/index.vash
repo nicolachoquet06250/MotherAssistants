@@ -6,7 +6,7 @@
 					<div class="card">
 						<div class="card-image">
 							<img src="/images/places-maxi-assistante-maternelle.png" />
-							<span class="card-title black-text">
+							<span class="card-title black-text" style="margin-top: 25px;">
 								Mon compte
 								<a href="/account/signout" class="black-text logout-btn">
 									<i class="material-icons" style="font-size: 30px; margin-top: 10px;">power_settings_new</i>

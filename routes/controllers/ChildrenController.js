@@ -16,6 +16,7 @@ module.exports = class Children {
 			},
 			post: {
 				'/add': Children.AddChild,
+				'/delete': Children.DeleteChild,
 				'/son': Children.Son,
 				'/daughter': Children.Daughter,
 			}
@@ -79,6 +80,35 @@ module.exports = class Children {
 					me.children.push(child.json);
 
 					AccountDAO.update({ _id: req.session.__id}, { children: child.json }, false, true, r => {
+						client.close();
+						res.redirect('/children');
+					}, err => {
+						console.error(err);
+						client.close();
+					});
+				});
+			});
+		}
+	}
+
+	static DeleteChild(req, res) {
+		let ctrl = new Children();
+		if(!ctrl.Session.Connected(req)) res.redirect('/home');
+		else {
+			ctrl.connector.onMongoConnect(client => {
+				let AccountDAO = ctrl.connector.getDao(client, 'account');
+				let post = req.body;
+				AccountDAO.get({ _id: req.session.__id }).then(accounts => {
+					let children = accounts.map(account => AccountDAO.createEntity(account))[0].children;
+					delete children[parseInt(post.id)];
+					let tmp = [];
+					for(let child_id in children) {
+						if(children[child_id] !== null) {
+							tmp.push(children[child_id]);
+						}
+					}
+					children = tmp;
+					AccountDAO.update({ _id: req.session.__id}, { children:  children}, false, false, r => {
 						client.close();
 						res.redirect('/children');
 					}, err => {
