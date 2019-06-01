@@ -8,7 +8,8 @@
 			@{ var account_active = 'active'; }
 		}
 		<li><a href="/account" class="@account_active">Mon compte</a></li>
-		@if(model.current_page === 'children') {
+		<li><a href="/account/signOut">Déconnection</a></li>
+	@if(model.current_page === 'children') {
 			@{ var children_active = 'active'; }
 		}
 		<li><a href="/children" class="@children_active">Mes enfants</a></li>
@@ -50,6 +51,7 @@
 					@{ var account_active = 'active'; }
 				}
 				<li><a href="/account" class="@account_active">Mon compte</a></li>
+				<li><a href="/account/signOut">Déconnection</a></li>
 				@if(model.current_page === 'children') {
 					@{ var children_active = 'active'; }
 				}
