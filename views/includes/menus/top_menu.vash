@@ -11,7 +11,6 @@
 			@{ var account_active = 'active'; }
 		}
 		<li><a href="/account" class="@account_active">Mon compte</a></li>
-		<li><a href="/account/signOut">Déconnection</a></li>
 	@if(model.current_page === 'children') {
 			@{ var children_active = 'active'; }
 		}
