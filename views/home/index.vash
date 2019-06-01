@@ -5,7 +5,7 @@
 				<div class="section white">
 					<div class="row container">
 						<div class="col-12">
-							<h1>@model.title</h1>
+							<h1><img src="/images/logo-web-transparent.png" alt="@model.title" class="responsive-img" /></h1>
 							<p>
 								@{ var presentation = model.app.presentation }
 								@presentation.forEach(function(item){
@@ -23,8 +23,13 @@
 				<div class="section white">
 					<div class="row container">
 						<div class="col-12">
-							<h1>@model.title</h1>
-							<p>Welcome to @model.title</p>
+							<h2><img src="/images/logo-web-transparent.png" alt="@model.title" class="responsive-img" /></h2>
+							<p>
+								@{ var presentation = model.app.presentation }
+									@presentation.forEach(function(item){
+										@item<br>
+									})
+							</p>
 						</div>
 					</div>
 				</div>
