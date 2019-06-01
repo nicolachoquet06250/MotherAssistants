@@ -6,15 +6,9 @@
 					<div class="card">
 						<div class="card-image">
 							<img src="/images/places-maxi-assistante-maternelle.png" />
-							<span class="card-title black-text" style="margin-top: 25px;">
-								Mon compte
-								<a href="/account/signout" class="black-text logout-btn">
-									<i class="material-icons" style="font-size: 30px; margin-top: 10px;">power_settings_new</i>
-								</a>
-							</span>
 						</div>
 						<div class="row profile-pic-container">
-							<div class="col offset-s7 s4 offset-m8 m3 offset-l8 l3" style="height: 100%;">
+							<div class="col offset-s4 s4 offset-m8 m3 offset-l8 l3" style="height: 100%;">
 								@if(model.user && model.user.profile_pic !== null) {
 									<div class="profile-pic" style="background-image: url('/uploads/@model.user.profile_pic');"></div>
 								}
@@ -24,6 +18,12 @@
 							</div>
 						</div>
 						<div class="card-content">
+							<span class="card-title black-text">
+								Mon compte
+								<a href="/account/signout" class="black-text" style="position: absolute; margin-left: 10px">
+									<i class="material-icons" style="font-size: 30px;">power_settings_new</i>
+								</a>
+							</span>
 							<form id="sign-on" method="post" action="/account/signOn" enctype="multipart/form-data" class="row">
 								<div class="input-field col s12 m6">
 									<input id="last_name" name="last_name" value="@model.user.last_name" type="text" class="validate">
