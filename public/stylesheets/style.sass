@@ -95,3 +95,26 @@ div.profile-pic
 	position: absolute
 	left: 170px
 	bottom: 15px
+
+.messages
+	.message
+		border: 1px solid black
+		min-height: 50px
+
+		-webkit-border-radius: 10px 10px 10px 10px
+		-moz-border-radius: 10px 10px 10px 10px
+		border-radius: 10px 10px 10px 10px
+		&.last
+			margin-top: 5px
+			margin-bottom: 15px
+		&.me
+			&.last
+				-webkit-border-radius: 10px 10px 0 10px
+				-moz-border-radius: 10px 10px 0 10px
+				border-radius: 10px 10px 0 10px
+		&.you
+			&.last
+				-webkit-border-radius: 10px 10px 10px 0
+				-moz-border-radius: 10px 10px 10px 0
+				border-radius: 10px 10px 10px 0
+

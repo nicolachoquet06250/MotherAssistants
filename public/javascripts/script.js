@@ -62,7 +62,7 @@ let setup_default = (after_init = null) =>
 		if (after_init !== null) {
 			after_init();
 		}
-		// $('.loader:first').fadeOut(3000, () =>  $('html').css('overflow-y', 'auto'));
+		$('.loader:first').fadeOut(1000, () =>  $('html').css('overflow-y', 'auto'));
 	});
 let setup_home = () => setup_default();
 let setup_sign_in = () => setup_default(() => {
@@ -121,17 +121,14 @@ let setup_children = () => setup_default(() => {
 		document.querySelector('#form_delete_child').submit();
 		console.log(document.querySelector('#are_you_sure').getAttribute('data-id'));
 	};
-
 	window.add_id_to_modal = id => {
 		document.querySelector('#are_you_sure').setAttribute('data-id', id);
 		document.querySelector('#hidden_child_id').value = id;
 	};
-
 	window.open_child_modal = id => {
 		fetch(`/children/get?id=${id}`)
 			.then(response => response.json())
 			.then(json => {
-				let elem = document.querySelector('#more_about_child .container');
 				let reset_elem = elem => elem.innerHTML = '';
 				let calculate_age = birth_day => {
 					function ecart_mois(date_max, date_min) {
@@ -170,6 +167,14 @@ let setup_children = () => setup_default(() => {
 				let space_tpl = (elem, height) => {
 					elem.innerHTML += `<div class="row" style="width: ${height}px;"></div>`;
 				};
+				let tpl_btn = (elem, href, icon, style, _class = '') => elem.innerHTML += `<a href="${href}" class="btn-floating btn-large waves-effect waves-light red ${_class}" 
+style="${style}">
+	<i class="material-icons">${icon}</i>
+</a>`;
+				let tpl_btn_parent = (href, icon, text, style = '', _class = '') => `<a href="${href}" class="waves-effect waves-light btn ${_class}" style="${style}">
+	<i class="material-icons left">${icon}</i>
+	${text}
+</a>`;
 				let tpl_first_and_last_name = (elem, first_name, last_name) => {
 					elem.innerHTML += `<div class="row">
 	<div class="col s12">
@@ -230,6 +235,14 @@ let setup_children = () => setup_default(() => {
 	<div class="input-field col s12 m6">
 		<button id="pw_for_mother" class="generate-password btn btn-flat">Générer un mot de passe</button>
 	</div>
+</div>
+<div class="row">
+	<div class="col s12 m3">
+		${tpl_btn_parent('#messages', 'messages', 'Messages', '', 'red modal-trigger')}
+	</div>
+	<div class="col s12 m3">
+		${tpl_btn_parent('#photos_in_messages', 'mms', 'Médias', '', 'red modal-trigger')}
+	</div>
 </div>`;
 					};
 					elem.innerHTML += tab_tpl_list(
@@ -254,10 +267,14 @@ let setup_children = () => setup_default(() => {
 					$('.tabs').tabs();
 					init_generate_password_buttons();
 				};
+
+				let elem = document.querySelector('#more_about_child .container');
 				reset_elem(elem);
 				space_tpl(elem, 20);
 				tpl_first_and_last_name(elem, json.first_name, json.last_name);
 				tpl_birthday(elem, json.birth_day);
+				tpl_btn(elem, '#messages', 'messages', 'margin-right: 15px; padding-left: 10px; margin-bottom: 20px;', 'modal-trigger');
+				tpl_btn(elem, '#photos_in_messages', 'mms', 'margin-right: 15px; padding-left: 0; margin-bottom: 20px;', 'modal-trigger');
 				tabs_tpl(elem, json.family);
 			}).catch(err => M.toast({html: `I am a toast! ${err}`}))
 	};

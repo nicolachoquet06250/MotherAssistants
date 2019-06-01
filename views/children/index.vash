@@ -182,5 +182,54 @@
 		<div id="more_about_child" class="modal modal-fixed-footer">
 			<div class="container"></div>
 		</div>
+
+		<div id="messages" class="modal bottom-sheet messages">
+			<div class="container">
+				<div class="row">
+					<div class="col s12" style="margin-top: 10px;">
+						<h4><i class="material-icons">messages</i> Messages</h4>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<div class="message me">
+
+						</div>
+						<div class="message me last">
+
+						</div>
+					</div>
+					<div class="col s12">
+						<div class="message you last">
+
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<textarea id="textarea1" class="materialize-textarea"></textarea>
+						<label for="textarea1">Textarea</label>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="photos_in_messages" class="modal modal-fixed-footer">
+			<div class="container">
+				<div class="row" style="margin-top: 20px;"></div>
+				<div class="row">
+					<div class="col s12">
+						<h4><i class="material-icons">mms</i> Médias</h4>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12 center-align">
+						<span>
+							Aucun média n'a été transmis dans cette conversation.
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
 	})
 })
