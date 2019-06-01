@@ -1,4 +1,7 @@
 <ul id="slide-out" class="sidenav">
+	@if(model.logged) {
+		<li><a href="/account/signOut">Déconnection</a></li>
+	}
 	@if(model.current_page === 'home') {
 		@{ var home_active = 'active'; }
 	}
@@ -42,6 +45,9 @@
 		<a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 		<a href="/" class="brand-logo">MotherAssistants</a>
 		<ul class="right hide-on-med-and-down">
+			@if(model.logged) {
+				<li><a href="/account/signOut"><i class="material-icons">power_settings_new</i></a></li>
+			}
 			@if(model.current_page === 'home') {
 				@{ var home_active = 'active'; }
 			}
@@ -51,7 +57,6 @@
 					@{ var account_active = 'active'; }
 				}
 				<li><a href="/account" class="@account_active">Mon compte</a></li>
-				<li><a href="/account/signOut">Déconnection</a></li>
 				@if(model.current_page === 'children') {
 					@{ var children_active = 'active'; }
 				}
