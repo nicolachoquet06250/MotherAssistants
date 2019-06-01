@@ -22,7 +22,7 @@
 										<div style="height: 50px;" class="valign-wrapper">
 											@child.first_name @child.last_name
 											<a href="#more_about_child" class="btn btn-floating secondary-content waves-effect red modal-trigger"
-											   onclick="add_id_to_modal('@key')" style="position: absolute; right: 70px;">
+											   onclick="open_child_modal('@key')" style="position: absolute; right: 70px;">
 												<i class="material-icons">more_vert</i>
 											</a>
 											<a href="#are_you_sure" class="btn btn-floating secondary-content waves-effect red modal-trigger"
@@ -180,7 +180,7 @@
 		</div>
 
 		<div id="more_about_child" class="modal modal-fixed-footer">
-
+			<div class="container"></div>
 		</div>
 	})
 })

@@ -10,6 +10,7 @@ module.exports = class Children {
 		return {
 			get: {
 				'/': Children.Home,
+				'/get': Children.GetChild,
 				'/son': Children.Son,
 				'/daughter': Children.Daughter,
 				'/diary': Children.Diary
@@ -116,6 +117,21 @@ module.exports = class Children {
 						client.close();
 					});
 				});
+			});
+		}
+	}
+
+	static GetChild(req, res) {
+		let ctrl = new Children();
+		if(!ctrl.Session.Connected(req)) res.redirect('/home');
+		else {
+			ctrl.connector.onMongoConnect(client => {
+				let DAO = ctrl.connector.getDao(client, 'account');
+				DAO.get({_id: req.session.__id}).then(accounts => {
+					res.send(accounts.map(account =>
+						DAO.createEntity(account).json)[0].children[parseInt(req.query.id)]);
+					client.close();
+				}).catch(console.error);
 			});
 		}
 	}

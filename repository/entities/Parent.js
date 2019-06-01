@@ -10,4 +10,9 @@ module.exports = class Parent extends Entity {
 			messages: 'Message[]'
 		};
 	}
+
+	constructor(connector, db_name) {
+		super(connector, db_name);
+		this.messages = [];
+	}
 };
