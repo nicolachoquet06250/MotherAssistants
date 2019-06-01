@@ -172,8 +172,7 @@ style="${style}">
 	<i class="material-icons">${icon}</i>
 </a>`;
 				let tpl_btn_parent = (href, icon, text, style = '', _class = '') => `<a href="${href}" class="waves-effect waves-light btn ${_class}" style="${style}">
-	<i class="material-icons left">${icon}</i>
-	<span class="show-on-medium">${text}</span>
+	<i class="material-icons left">${icon}</i> ${text}
 </a>`;
 				let tpl_first_and_last_name = (elem, first_name, last_name) => {
 					elem.innerHTML += `<div class="row">
@@ -237,10 +236,10 @@ style="${style}">
 	</div>
 </div>
 <div class="row">
-	<div class="col s7 m3">
+	<div class="col s12 m3 center-align" style="margin-top: 5px;">
 		${tpl_btn_parent('#messages', 'messages', 'Messages', '', 'red modal-trigger')}
 	</div>
-	<div class="col s5 m3">
+	<div class="col s12 m3 center-align" style="margin-top: 5px;">
 		${tpl_btn_parent('#photos_in_messages', 'mms', 'Médias', '', 'red modal-trigger')}
 	</div>
 </div>`;
