@@ -173,7 +173,7 @@ style="${style}">
 </a>`;
 				let tpl_btn_parent = (href, icon, text, style = '', _class = '') => `<a href="${href}" class="waves-effect waves-light btn ${_class}" style="${style}">
 	<i class="material-icons left">${icon}</i>
-	${text}
+	<span class="show-on-medium">${text}</span>
 </a>`;
 				let tpl_first_and_last_name = (elem, first_name, last_name) => {
 					elem.innerHTML += `<div class="row">
