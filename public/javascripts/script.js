@@ -237,10 +237,10 @@ style="${style}">
 	</div>
 </div>
 <div class="row">
-	<div class="col s6 m3">
+	<div class="col s7 m3">
 		${tpl_btn_parent('#messages', 'messages', 'Messages', '', 'red modal-trigger')}
 	</div>
-	<div class="col s6 m3">
+	<div class="col s5 m3">
 		${tpl_btn_parent('#photos_in_messages', 'mms', 'Médias', '', 'red modal-trigger')}
 	</div>
 </div>`;
