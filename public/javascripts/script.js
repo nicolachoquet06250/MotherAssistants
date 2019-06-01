@@ -274,9 +274,11 @@ style="${style}">
 				tpl_birthday(elem, json.birth_day);
 				tpl_btn(elem, '#messages', 'messages', 'margin-right: 15px; padding-left: 10px; margin-bottom: 20px;', 'modal-trigger');
 				tpl_btn(elem, '#photos_in_messages', 'mms', 'margin-right: 15px; padding-left: 0; margin-bottom: 20px;', 'modal-trigger');
+				tpl_btn(elem, '#life_diary', 'event_note', 'margin-right: 15px; padding-left: 0; margin-bottom: 20px;', 'modal-trigger');
 				tabs_tpl(elem, json.family);
 			}).catch(err => M.toast({html: `I am a toast! ${err}`}))
 	};
+	window.open_life_diary = id => {};
 });
 let setup = page_name => pages.includes(page_name) ? eval(`setup_${page_name}()`) : setup_default();
 let change_label_approvals = new_value => document.querySelector('label[for=nb_approvals]').innerHTML = new_value;

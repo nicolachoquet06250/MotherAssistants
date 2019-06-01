@@ -21,6 +21,10 @@
 									<li class="collection-item">
 										<div style="height: 50px;" class="valign-wrapper">
 											@child.first_name @child.last_name
+											<a href="#life_diary" class="btn btn-floating secondary-content waves-effect red modal-trigger hide-on-small-and-down"
+											   onclick="open_life_diary('@key')" style="position: absolute; right: 120px;">
+												<i class="material-icons">event_note</i>
+											</a>
 											<a href="#more_about_child" class="btn btn-floating secondary-content waves-effect red modal-trigger"
 											   onclick="open_child_modal('@key')" style="position: absolute; right: 70px;">
 												<i class="material-icons">more_vert</i>
@@ -231,5 +235,7 @@
 				</div>
 			</div>
 		</div>
+
+		<div id="life_diary" class="modal modal-fixed-footer"></div>
 	})
 })
