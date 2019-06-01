@@ -209,6 +209,7 @@ style="${style}">
 						return tpl;
 					};
 					let tpl_parent_tab = (id, parent) => {
+						let parent_exists = true;
 						if(parent === null) {
 							parent = {
 								first_name: '',
@@ -217,6 +218,7 @@ style="${style}">
 								password: '',
 								messages: []
 							};
+							parent_exists = false;
 						}
 						return `<div class="row">
 	<div class="input-field col s12 m6">
@@ -236,10 +238,13 @@ style="${style}">
 	</div>
 </div>
 <div class="row">
-	<div class="col s12 m6 center-align" style="margin-top: 5px;">
+	<div class="col s12 m4 center-align" style="margin-top: 5px;">
+		${tpl_btn_parent('#messages', 'send', (parent_exists ? 'Modifier' : 'Créer'), '', 'red modal-trigger')}
+	</div>
+	<div class="col s12 m4 center-align" style="margin-top: 5px;">
 		${tpl_btn_parent('#messages', 'messages', 'Messages', '', 'red modal-trigger')}
 	</div>
-	<div class="col s12 m6 center-align" style="margin-top: 5px;">
+	<div class="col s12 m4 center-align" style="margin-top: 5px;">
 		${tpl_btn_parent('#photos_in_messages', 'mms', 'Médias', '', 'red modal-trigger')}
 	</div>
 </div>`;

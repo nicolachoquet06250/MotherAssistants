@@ -4,15 +4,15 @@
 			<div class="row">
 				<div class="col s12">
 					<h3 class="title">@model.title</h3>
-					<a class="btn-floating btn-large waves-effect waves-light red modal-trigger"
+					<a class="btn-floating waves-effect waves-light red modal-trigger"
 					        href="#add_child_modal"
 					        style="margin-top: -85px; margin-left: 235px;"
 					        title="Ajouter un enfant" ><i class="material-icons">add</i></a>
 				</div>
-				<div class="col s10 offset-s1">
+				<div class="col s12 m10 offset-m1">
 						@if(model.children.length === 0) {
 							<div class="collection">
-								<a href="" class="collection-item active center-align">Vous ne gardez encore aucun enfants</a>
+								<a href="" class="collection-item active center-align red">Vous ne gardez encore aucun enfants</a>
 							</div>
 						}
 						else {
@@ -21,6 +21,14 @@
 									<li class="collection-item">
 										<div style="height: 50px;" class="valign-wrapper">
 											@child.first_name @child.last_name
+											<a href="#messages" class="btn btn-floating secondary-content waves-effect red modal-trigger hide-on-small-and-down"
+											   style="position: absolute; right: 220px;">
+												<i class="material-icons">chat</i>
+											</a>
+											<a href="#photos_in_messages" class="btn btn-floating secondary-content waves-effect red modal-trigger hide-on-small-and-down"
+											   style="position: absolute; right: 170px;">
+												<i class="material-icons">mms</i>
+											</a>
 											<a href="#life_diary" class="btn btn-floating secondary-content waves-effect red modal-trigger hide-on-small-and-down"
 											   onclick="open_life_diary('@key')" style="position: absolute; right: 120px;">
 												<i class="material-icons">event_note</i>
@@ -97,7 +105,7 @@
 						<div class="input-field col s12 m6">
 							<button id="pw_for_father" class="generate-password btn btn-flat">Générer un mot de passe</button>
 						</div>
-						<div class="col s12">
+						<!--<div class="col s12">
 							<h5>Calendrier</h5>
 						</div>
 						<div class="col s12">
@@ -160,7 +168,7 @@
 									</tr>
 								</tbody>
 							</table>
-						</div>
+						</div>-->
 						<input type="submit" id="add_child_submit" value="Valider" hidden>
 					</form>
 				</div>
