@@ -10,7 +10,11 @@
 						<div class="row profile-pic-container">
 							<div class="col offset-s4 s4 offset-m8 m3 offset-l8 l3" style="height: 100%;">
 								@if(model.user && model.user.profile_pic !== null) {
-									@{ var profile_pic = '/uploads/@model.user.profile_pic' }
+									<script>
+										let profile_pic = '@model.user.profile_pic';
+										console.log(profile_pic);
+									</script>
+									@{ var profile_pic = '/uploads/' + model.user.profile_pic }
 								}
 								else {
 									@{ var profile_pic = '/images/default_profile_pic.png' }
@@ -74,7 +78,7 @@
 
 	@html.block('modals', function(model) {
 		@if(model.user && model.user.profile_pic !== null) {
-			@{ var profile_pic = '/uploads/@model.user.profile_pic' }
+			@{ var profile_pic = '/uploads/' + model.user.profile_pic }
 		}
 		else {
 			@{ var profile_pic = '/images/default_profile_pic.png' }
@@ -88,17 +92,29 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col s12 m6" style="height: 100%;">
-
+						<div class="col s12 m6 valign-wrapper" style="height: 100%;">
+							<div style="width: 250px; height: 250px; background-size: contain; background-repeat: no-repeat; background-position: center; border: 1px solid black; background-image: url('@profile_pic');" id="profile_pic_into_to_change"></div>
 						</div>
 						<div class="col s12 m6" style="height: 100%;">
-
+							<form method="post" id="form_update_profile_pic" action="/account/update/profile_pic" enctype="multipart/form-data">
+								<div class="file-field input-field">
+									<div class="btn">
+										<span>Uploader</span>
+										<input type="file" name="profile_pic" id="profile_pic_to_update">
+									</div>
+									<div class="file-path-wrapper">
+										<input class="file-path validate" type="text" placeholder="Votre nouvelle photo de profile">
+									</div>
+								</div>
+								<input type="submit" id="submit_update_profile_pic" hidden />
+							</form>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
-				<a href="#!" class="modal-close waves-effect waves-green btn-flat">Annuler</a>
+				<button onclick="document.querySelector('#submit_update_profile_pic').click()" class="waves-effect waves-green btn-flat">Valider</button>
+				<a href="#!" class="modal-close waves-effect waves-green btn-flat" id="cancel_update_profile_pic">Annuler</a>
 			</div>
 		</div>
 	})

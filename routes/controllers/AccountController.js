@@ -5,6 +5,7 @@ module.exports = class Account {
 		this.connector = require('../../modules/database/mongodb_connector');
 		this.pwHelper = require('../../modules/helpers/Passwords');
 		this.Session = require('../../modules/helpers/Session');
+		this.fs = require('fs');
 	}
 	static get routes() {
 		return {
@@ -16,7 +17,10 @@ module.exports = class Account {
 			},
 			post: {
 				'/signIn': Account.SignInPost,
-				'/signOn': Account.SignOnPost
+				'/signOn': Account.SignOnPost,
+				'/pre_update/profile_pic': Account.PreUpdateProfilePic,
+				'/update/profile_pic': Account.UpdateProfilePic,
+				'/delete/old/pre_update/profile_pic': Account.DeletePreUpdatedProfilePic
 			}
 		}
 	}
@@ -120,16 +124,17 @@ module.exports = class Account {
 	}
 
 	static SignOnPost(req, res) {
-		let profile_pic = req.files.profile_pic;
+		let files = req.files;
+		let profile_pic = files.profile_pic;
 		let post = req.body;
+		let ctrl = new Account();
 		let complete_name =
-			    `${req.files.profile_pic.md5}.${Account.mimes2ext[req.files.profile_pic.mimetype]}`;
+			    `${files.profile_pic.md5}.${Account.mimes2ext[files.profile_pic.mimetype]}`;
 		if(profile_pic.name.length > 0) {
-			profile_pic.mv(`${__dirname}/../../uploads/${req.files.profile_pic.md5}.${Account.mimes2ext[req.files.profile_pic.mimetype]}`,
-				() => {});
+			ctrl.fs.rename(`${__dirname}/../../${files.profile_pic.tempFilePath}`,
+				`${__dirname}/../../uploads/${files.profile_pic.md5}.${Account.mimes2ext[files.profile_pic.mimetype]}`, () => {});
 			post['profile_pic'] = complete_name;
 		}
-		let ctrl = new Account();
 		let connector = ctrl.connector;
 		connector.onMongoConnect(client => {
 			let AccountDao = connector.getDao(client, Account.module);
@@ -155,5 +160,54 @@ module.exports = class Account {
 				.append('message', `Le Formulaire n'est pas complet`)
 				.add_error({ status: 500, stack: '' }).object)
 		);
+	}
+
+	static UpdateProfilePic(req, res) {
+		let ctrl = new Account();
+		if(!ctrl.Session.Connected(req)) res.redirect('/home');
+		else {
+			ctrl.connector.onMongoConnect(client => {
+				let DAO = ctrl.connector.getDao(client, 'account');
+				DAO.get({ _id: req.session.__id }).then(accounts => {
+					let me = accounts.map(account => DAO.createEntity(account).json)[0];
+					me.profile_pic = req.session.old_pre_updated_profile_pic;
+					DAO.update({ _id: req.session.__id }, { profile_pic: req.session.old_pre_updated_profile_pic }, true, false, r => {
+						console.log(r);
+						res.redirect('/account');
+					}, console.error);
+				})
+			});
+		}
+	}
+
+	static PreUpdateProfilePic(req, res) {
+		let ctrl = new Account();
+		if(!ctrl.Session.Connected(req)) res.redirect('/home');
+		else {
+			let files = req.files;
+			if(files.profile_pic) {
+				console.log(files.profile_pic);
+				ctrl.fs.rename(`${__dirname}/../../${files.profile_pic.tempFilePath}`,
+					`${__dirname}/../../uploads/${files.profile_pic.md5}.${Account.mimes2ext[files.profile_pic.mimetype]}`,
+						err => {
+							if(err) {
+								res.type('application/json');
+								res.send({ success: false, error: err });
+								res.end();
+							}
+							else {
+								req.session.old_pre_updated_profile_pic = `${req.files.profile_pic.md5}.${Account.mimes2ext[req.files.profile_pic.mimetype]}`;
+								res.type('application/json');
+								res.send({ success: true, url: `/uploads/${req.files.profile_pic.md5}.${Account.mimes2ext[req.files.profile_pic.mimetype]}` });
+								res.end();
+							}
+						});
+			}
+		}
+	}
+
+	static DeletePreUpdatedProfilePic(req, res) {
+		delete req.session.old_pre_updated_profile_pic;
+		res.send('');
 	}
 };

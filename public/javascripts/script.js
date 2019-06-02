@@ -107,6 +107,21 @@ let setup_account = () => setup_default(() => {
 		});
 	});
 	$('.modal').modal();
+
+	$('#profile_pic_to_update').on('change', e => {
+		fetch(`/account/pre_update/profile_pic`, {
+			method: 'post',
+			body: new FormData(document.querySelector('#form_update_profile_pic'))
+		}).then(response => response.json())
+			.then(json => {
+				if(json.success) {
+					document.querySelector('#profile_pic_into_to_change').style.backgroundImage = `url("${json.url}")`;
+				}
+			})
+			.catch(console.error);
+	});
+
+	$('#cancel_update_profile_pic').on('click', e => fetch(`/account/pre_update/profile_pic`, { method: 'post' }).then(() => {}));
 });
 let setup_children = () => setup_default(() => {
 	$('.modal').modal();
