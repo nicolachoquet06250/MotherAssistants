@@ -1,3 +1,19 @@
+@-webkit-keyframes bouncing_bottom
+	0%
+		bottom: var(--max-bottom)
+	50%
+		bottom: var(--middle-bottom)
+	100%
+		bottom: var(--min-bottom)
+
+@-webkit-keyframes bouncing_top
+	0%
+		bottom: var(--min-bottom)
+	50%
+		bottom: var(--middle-bottom)
+	100%
+		bottom: var(--max-bottom)
+
 body, html
 	margin: 0
 	padding: 0
@@ -90,6 +106,25 @@ div.profile-pic
 	position: relative
 	margin-top: -150px
 	width: 100%
+	overflow: hidden
+	.profile-pic-toolbar
+		--min-bottom: -50px
+		--middle-bottom: -25px
+		--max-bottom: 0
+
+		position: absolute
+		z-index: 998
+		bottom: -50px
+		right: 0
+		left: 0
+		height: 50px
+		background: rgba(0, 0, 0, 0.5)
+		&.animation-top
+			animation: bouncing_top 1s ease-in
+			bottom: var(--max-bottom)
+		&.animation-bottom
+			animation: bouncing_bottom 1s ease-out
+			bottom: var(--min-bottom)
 
 .logout-btn
 	position: absolute

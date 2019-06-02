@@ -86,6 +86,27 @@ let setup_account = () => setup_default(() => {
 	window.onresize = () => {
 		profile_pic_resize();
 	};
+
+	document.querySelectorAll('.profile-pic, .profile-pic-toolbar').forEach(elem => {
+		let old_class = null;
+		elem.addEventListener('mouseover', () => {
+			if(elem.classList.contains('profile-pic') && old_class === null) {
+				elem.querySelector('.profile-pic-toolbar').classList.add('animation-top');
+				elem.querySelector('.profile-pic-toolbar').classList.remove('animation-bottom');
+				old_class = 'profile-pic';
+			}
+			else if (elem.classList.contains('profile-pic-toolbar') && old_class === 'profile-pic') old_class = 'profile-pic-toolbar';
+		});
+		elem.addEventListener('mouseout', () => {
+			if(elem.classList.contains('profile-pic') && old_class === 'profile-pic-toolbar') old_class = 'profile-pic';
+			else {
+				elem.querySelector('.profile-pic-toolbar').classList.remove('animation-top');
+				elem.querySelector('.profile-pic-toolbar').classList.add('animation-bottom');
+				old_class = null;
+			}
+		});
+	});
+	$('.modal').modal();
 });
 let setup_children = () => setup_default(() => {
 	$('.modal').modal();
