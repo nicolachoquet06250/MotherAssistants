@@ -51,7 +51,8 @@ let pages = [
 	'sign_in',
 	'sign_on',
 	'account',
-	'children'
+	'children',
+	'contacts'
 ];
 
 let setup_default = (after_init = null) =>
@@ -320,6 +321,34 @@ style="${style}">
 			}).catch(err => M.toast({html: `I am a toast! ${err}`}))
 	};
 	window.open_life_diary = id => {};
+});
+let setup_contacts = () => setup_default(() => {
+	document.querySelector('#contact_form').addEventListener('submit', e => {
+		e.preventDefault();
+		let options = {
+			first_name: document.querySelector('#first_name').value,
+			last_name: document.querySelector('#last_name').value,
+			email: document.querySelector('#email').value,
+			message: document.querySelector('#message').value
+		};
+
+		fetch('/contacts', {
+			method: 'post',
+			body: options
+		}).then(r => r.json())
+			.then(json => {
+				console.log(json);
+				let elem = document.querySelector('#return_message');
+				json.success ? (() => {
+					elem.classList.remove('red-text');
+					elem.classList.add('green-text');
+				})() : (() => {
+					elem.classList.remove('green-text');
+					elem.classList.add('red-text');
+				})();
+				elem.innerHTML = json.message;
+			});
+	});
 });
 let setup = page_name => pages.includes(page_name) ? eval(`setup_${page_name}()`) : setup_default();
 let change_label_approvals = new_value => document.querySelector('label[for=nb_approvals]').innerHTML = new_value;

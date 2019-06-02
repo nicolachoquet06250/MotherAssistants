@@ -15,6 +15,9 @@ module.exports = class Home {
 				'/manifest.json': Home.manifest,
 				'/sw.js': Home.serviceWorker,
 				'/node_modules/materialize-social/materialize-social.css': Home.materializeSocialCss,
+			},
+			post: {
+				'/contacts': Home.contactsPost
 			}
 		}
 	}
@@ -40,6 +43,47 @@ module.exports = class Home {
 			.append('title', 'Contactez nous')
 			.append('current_page', 'contacts')
 			.append('logged', new Home().Session.Connected(req)).object)
+	}
+
+	static contactsPost(req, res) {
+		let mailer = require('nodemailer');
+		let post = req.body;
+		let transport = mailer.createTransport({
+			host: 'smtp.gmail.com',
+			port: 465,
+			secure: true,
+			auth: {
+				user: 'nicolachoquet06250@gmail.com',
+				pass: '12041998Yann21071995Nicolas.'
+			}
+		});
+
+		transport.sendMail({
+			from: `${post.first_name} ${post.last_name}<nicolachoquet06250@gmail.com>`,
+			to: post.email,
+			subject: 'Contact',
+			html: `<p>${post.message}</p>`
+		}, (err, success) => {
+			if(success) {
+				console.log('mail success', success);
+				res.type('application/json');
+				res.send({
+					success: true,
+					message: 'Votre email de contact à bien été envoyé'
+				});
+				res.end();
+			}
+			if(err) {
+				console.log('mail error', err);
+				res.type('application/json');
+				res.send({
+					success: false,
+					message: `Une erreur est survenue lors de l'envoie de votre email !`
+				});
+				res.end();
+			}
+			transport.close();
+		});
 	}
 
 	static manifest(req, res) {
