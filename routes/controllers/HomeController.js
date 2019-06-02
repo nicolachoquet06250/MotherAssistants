@@ -43,6 +43,7 @@ module.exports = class Home {
 	}
 
 	static manifest(req, res) {
+		res.type('application/json');
 		res.send(require('fs').readFileSync(`${__dirname}/../../manifest.json`).toString());
 		res.end();
 	}
