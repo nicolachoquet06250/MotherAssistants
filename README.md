@@ -7,6 +7,7 @@
         - https://www.npmjs.com/package/comment-parser
         - https://github.com/eslint/doctrine
         - https://medium.com/4thought-studios/documenting-javascript-projects-f72429da2eea
+   - (générer une image) https://via.placeholder.com/[width]x[height]
 ---------------------------------------------------------------------
 ###URLS
     - Home ( everybody access )
