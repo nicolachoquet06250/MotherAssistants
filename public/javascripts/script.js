@@ -68,6 +68,18 @@ let setup_default = (after_init = null) =>
 		}).then(r => r.json())
 			.then(json => {
 				if(json.connected) {
+					// demande d'authorisation pour les notifications
+					if(window.Notification !== undefined && Notification.permission !== "granted") {
+						Notification.requestPermission( function(status) {
+							if (Notification.permission !== status) {
+								Notification.permission = status;
+							}
+							new Notification("MotherAssistants Vous remercie", {
+								icon: '/images/icons/profile-icon-grey-96x96.png',
+								body: "Merci d'avoir autoriser les notifications"
+							});
+						}).then(() => console.log('vous avez authorisé les notifications'))
+					}
 					let domain = main_domain();
 					let socket = io.connect(`http${domain !== 'localhost' ? 's' : ''}://${domain}${domain === 'localhost' ? ':3000' : ''}`);
 					socket.on('connect', data => {
@@ -76,12 +88,32 @@ let setup_default = (after_init = null) =>
 						switch (document.visibilityState) {
 							case "hidden":
 								// afficher une notification push avec action click
+								if(Notification.permission !== "granted") {
+									M.toast({
+										html: `Vous avez un nouveau message`
+									});
+								}
+								else {
+									new Notification("MotherAssistants", {
+										icon: '/images/icons/profile-icon-grey-96x96.png',
+										body: `Vous avez un nouveau message`
+									});
+								}
 								break;
 							case "visible":
 								// afficher un toast avec action click
+								M.toast({
+									html: `Vous avez un nouveau message`
+								});
 								break;
 							case "prerender":
 								// afficher une notification push avec action click
+								if(Notification.permission === 'granted') {
+									new Notification("MotherAssistants", {
+										icon: '/images/icons/profile-icon-grey-96x96.png',
+										body: `Vous avez un nouveau message`
+									});
+								}
 								break;
 						}
 					});

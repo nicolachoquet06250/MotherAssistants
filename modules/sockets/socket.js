@@ -1,10 +1,10 @@
 module.exports = io => {
     io.on('connection', function (client) {
-        // let cmp = 0;
-        // let nb_messages = null;
         let connector = require('../database/mongodb_connector');
+        // un utilisateur se connecte sur le site
         client.on('join', data => {
             if(data._id) {
+                // si il est loggé
                 connector.onMongoConnect(_client => {
                     let DAO = connector.getDao(_client, 'account');
                     DAO.get({ _id: data._id }).then(accounts => {
@@ -21,7 +21,9 @@ module.exports = io => {
             }
         });
         client.on('new_message', data => {
-            client.broadcast.emit('new_message', data.message);
+            if(client._id) {
+                client.broadcast.emit('new_message', data.message);
+            }
         });
     });
 };

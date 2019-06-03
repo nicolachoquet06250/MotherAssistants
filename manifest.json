@@ -24,5 +24,10 @@
 			"size": "513x513"
 		}
 	],
+	"permissions": {
+		"desktop-notification": {
+			"description": "Needed for creating system notifications."
+		}
+	},
 	"prefer_related_applications": false
 }
