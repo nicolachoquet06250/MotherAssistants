@@ -69,7 +69,7 @@ let setup_default = (after_init = null) =>
 		}).then(r => r.json())
 			.then(json => {
 				if(json.connected) {
-					let socket = io.connect('http://localhost:3001');
+					let socket = io.connect(`http://${main_domain()}:3001`);
 					socket.on('connect', function(data) {
 						socket.emit('join', {_id: json._id, message: 'Hello World from client'});
 					});
