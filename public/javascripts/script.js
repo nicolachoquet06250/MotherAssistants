@@ -72,6 +72,18 @@ let setup_default = (after_init = null) =>
 					let socket = io.connect(`http${domain !== 'localhost' ? 's' : ''}://${domain}${domain === 'localhost' ? ':3000' : ''}`);
 					socket.on('connect', data => {
 						socket.emit('join', {_id: json._id, message: 'Hello World from client'});
+						// gérer la visibilité lors de la réception de nouveaux messages ou nouveaux médias
+						switch (document.visibilityState) {
+							case "hidden":
+								// afficher une notification push avec action click
+								break;
+							case "visible":
+								// afficher un toast avec action click
+								break;
+							case "prerender":
+								// afficher une notification push avec action click
+								break;
+						}
 					});
 				}
 			});
