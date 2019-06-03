@@ -57,7 +57,7 @@
 									<label for="check_password">Vérification du mot de passe</label>
 								</div>
 								<div class="input-field col s12">
-									<input id="birth_day" name="birth_day" value="@model.user.birth_day" type="text" class="datepicker validate">
+									<input id="birth_day" name="birth_day" value="@model.user.birth_day" type="date" class="validate">
 									<label for="birth_day">Date de naissance</label>
 								</div>
 								<div class="input-field col s12">
