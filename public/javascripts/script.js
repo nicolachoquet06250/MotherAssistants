@@ -60,17 +60,17 @@ let setup_default = (after_init = null) =>
 		$('.parallax').parallax();
 		$('.sidenav').sidenav();
 		$('.dropdown-trigger').dropdown();
-		if (after_init !== null) {
-			after_init();
-		}
+		if (after_init !== null) after_init();
 		$('.loader:first').fadeOut(1000, () =>  $('html').css('overflow-y', 'auto'));
+
 		fetch('/connected', {
 			method: 'post'
 		}).then(r => r.json())
 			.then(json => {
 				if(json.connected) {
-					let socket = io.connect(`http://${main_domain()}:3001`);
-					socket.on('connect', function(data) {
+					let domain = main_domain();
+					let socket = io.connect(`http://${domain}${domain === 'localhost' ? '' : `:3000`}`);
+					socket.on('connect', data => {
 						socket.emit('join', {_id: json._id, message: 'Hello World from client'});
 					});
 				}

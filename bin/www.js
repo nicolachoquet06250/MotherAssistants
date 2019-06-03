@@ -6,12 +6,10 @@
 
 let App = require('../app');
 let app = App.app;
-let server = App.server;
 
 let port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
-server.listen(port + 1);
 require('../modules/sockets/socket')(App.io);
 
 app.listen(port, '0.0.0.0');
