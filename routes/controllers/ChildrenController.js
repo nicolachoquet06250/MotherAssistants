@@ -38,9 +38,15 @@ module.exports = class Children {
 					_id: req.session.__id
 				}, { children: 1 }).then(accounts => {
 					let me = accounts.map(account => DAO.createEntity(account).json)[0];
+					let children_keys = [];
+					for(let key in me.children) {
+						children_keys.push(1);
+					}
 					res.render('children/index', options.BaseOptions
 						.append('title', 'Mes enfants')
 						.append('children', me.children)
+						.append('nb_global_messages', children_keys)
+						.append('nb_global_medias', children_keys)
 						.append('current_page', 'children')
 						.append('logged', ctrl.Session.Connected(req)).object);
 				});

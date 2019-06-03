@@ -64,6 +64,17 @@ let setup_default = (after_init = null) =>
 			after_init();
 		}
 		$('.loader:first').fadeOut(1000, () =>  $('html').css('overflow-y', 'auto'));
+		fetch('/connected', {
+			method: 'post'
+		}).then(r => r.json())
+			.then(json => {
+				if(json.connected) {
+					let socket = io.connect('http://localhost:3001');
+					socket.on('connect', function(data) {
+						socket.emit('join', {_id: json._id, message: 'Hello World from client'});
+					});
+				}
+			});
 	});
 let setup_home = () => setup_default();
 let setup_sign_in = () => setup_default(() => {
@@ -276,12 +287,12 @@ style="${style}">
 </div>
 <div class="row">
 	<div class="col s12 m4 center-align" style="margin-top: 5px;">
-		${tpl_btn_parent('#messages', 'send', (parent_exists ? 'Modifier' : 'Créer'), '', 'red modal-trigger')}
+		${tpl_btn_parent('#!', 'send', (parent_exists ? 'Modifier' : 'Créer'), '', 'red modal-trigger')}
 	</div>
-	<div class="col s12 m4 center-align" style="margin-top: 5px;">
+	<div class="col s12 m4 center-align message-modal-button-container" parent-role="${id}" style="margin-top: 5px;">
 		${tpl_btn_parent('#messages', 'messages', 'Messages', '', 'red modal-trigger')}
 	</div>
-	<div class="col s12 m4 center-align" style="margin-top: 5px;">
+	<div class="col s12 m4 center-align message-modal-button-container" parent-role="${id}" style="margin-top: 5px;">
 		${tpl_btn_parent('#photos_in_messages', 'mms', 'Médias', '', 'red modal-trigger')}
 	</div>
 </div>`;
@@ -307,6 +318,18 @@ style="${style}">
 					);
 					$('.tabs').tabs();
 					init_generate_password_buttons();
+					document.querySelectorAll('.message-modal-button-container').forEach(container => {
+						let role = container.getAttribute('parent-role');
+						container = container.querySelector('a');
+						container.addEventListener('click', () => {
+							if(container.getAttribute('href') === '#messages') {
+								open_specific_parent_messages(role);
+							}
+							else if (container.getAttribute('href') === '#photos_in_messages') {
+								open_specific_parent_medias(role);
+							}
+						});
+					})
 				};
 
 				let elem = document.querySelector('#more_about_child .container');
@@ -314,13 +337,40 @@ style="${style}">
 				space_tpl(elem, 20);
 				tpl_first_and_last_name(elem, json.first_name, json.last_name);
 				tpl_birthday(elem, json.birth_day);
-				tpl_btn(elem, '#messages', 'messages', 'margin-right: 15px; padding-left: 10px; margin-bottom: 20px;', 'modal-trigger');
-				tpl_btn(elem, '#photos_in_messages', 'mms', 'margin-right: 15px; padding-left: 0; margin-bottom: 20px;', 'modal-trigger');
+				tpl_btn(elem, '#messages', 'messages', 'margin-right: 15px; padding-left: 10px; margin-bottom: 20px;', 'modal-trigger message-modal-button');
+				tpl_btn(elem, '#photos_in_messages', 'mms', 'margin-right: 15px; padding-left: 0; margin-bottom: 20px;', 'modal-trigger message-modal-button');
 				tpl_btn(elem, '#life_diary', 'event_note', 'margin-right: 15px; padding-left: 0; margin-bottom: 20px;', 'modal-trigger');
 				tabs_tpl(elem, json.family);
+
+				document.querySelectorAll('.message-modal-button').forEach(button => {
+					button.addEventListener('click', () => {
+						if(button.getAttribute('href') === '#messages') {
+							open_global_child_messages();
+						}
+						else if (button.getAttribute('href') === '#photos_in_messages') {
+							open_global_child_medias();
+						}
+					})
+				})
 			}).catch(err => M.toast({html: `I am a toast! ${err}`}))
 	};
 	window.open_life_diary = id => {};
+	window.open_specific_parent_messages = role => {
+		let container = document.querySelector('#messages');
+		container.setAttribute('parent-role', role);
+	};
+	window.open_specific_parent_medias = role => {
+		let container = document.querySelector('#photos_in_messages');
+		container.setAttribute('parent-role', role);
+	};
+	window.open_global_child_medias = () => {
+		let container = document.querySelector('#photos_in_messages');
+		container.setAttribute('parent-role', 'family');
+	};
+	window.open_global_child_messages = () => {
+		let container = document.querySelector('#messages');
+		container.setAttribute('parent-role', 'family');
+	};
 });
 let setup_contacts = () => setup_default(() => {
 	document.querySelector('#contact_form').addEventListener('submit', e => {

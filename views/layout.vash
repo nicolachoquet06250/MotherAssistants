@@ -25,6 +25,7 @@
 
 	<link rel='stylesheet'
 	      href='/stylesheets/style.css' />
+	<script src="/socket.io/socket.io.js"></script>
 	@html.block('additional_css')
 </head>
 <body>

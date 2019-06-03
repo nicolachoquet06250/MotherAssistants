@@ -15,9 +15,11 @@ module.exports = class Home {
 				'/manifest.json': Home.manifest,
 				'/sw.js': Home.serviceWorker,
 				'/node_modules/materialize-social/materialize-social.css': Home.materializeSocialCss,
+				'/socket.io/socket.io.js': Home.socketIOClient
 			},
 			post: {
-				'/contacts': Home.contactsPost
+				'/contacts': Home.contactsPost,
+				'/connected': Home.connectedPost,
 			}
 		}
 	}
@@ -101,5 +103,19 @@ module.exports = class Home {
 	static materializeSocialCss(req, res) {
 		res.writeHead(200, {'Content-Type': 'text/css'});
 		res.end(require('fs').readFileSync(`${__dirname}/../../node_modules/materialize-social/materialize-social.css`).toString());
+	}
+
+	static socketIOClient(req, res) {
+		res.writeHead(200, {'Content-Type': 'application/javascript'});
+		res.end(require('fs').readFileSync(`${__dirname}/../../node_modules/socket.io-client/dist/socket.io.js`).toString());
+	}
+
+	static connectedPost(req, res) {
+		let ctrl = new Home();
+		res.type('application/json');
+		res.send({
+			connected: ctrl.Session.Connected(req),
+			_id: req.session.__id
+		})
 	}
 };

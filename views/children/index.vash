@@ -21,14 +21,40 @@
 									<li class="collection-item">
 										<div style="height: 50px;" class="valign-wrapper">
 											@child.first_name @child.last_name
+											@if(model.nb_global_messages[key] !== 0) {
+												@{ var right = '230px'; }
+											}
+											else {
+												@{ var right = '220px'; }
+											}
 											<a href="#messages" class="btn btn-floating secondary-content waves-effect red modal-trigger hide-on-small-and-down"
-											   style="position: absolute; right: 220px;">
+											   style="position: absolute; right:@right;">
 												<i class="material-icons">chat</i>
 											</a>
+											<span class="global_messages_notifications" data-child="@key">
+												@if(model.nb_global_messages[key] !== 0) {
+													<span style="position:absolute; right: 220px; bottom: 25px; z-index: 999;">
+														@model.nb_global_messages[key]
+													</span>
+												}
+											</span>
+											@if(model.nb_global_medias[key] !== 0) {
+												@{ var right = '180px'; }
+											}
+											else {
+												@{ var right = '170px'; }
+											}
 											<a href="#photos_in_messages" class="btn btn-floating secondary-content waves-effect red modal-trigger hide-on-small-and-down"
-											   style="position: absolute; right: 170px;">
+											   style="position: absolute; right:@right;">
 												<i class="material-icons">mms</i>
 											</a>
+											<span class="global_medias_notifications" data-child="@key">
+												@if(model.nb_global_medias[key] !== 0) {
+													<span style="position:absolute; right: 170px; bottom: 25px; z-index: 999;">
+														@model.nb_global_medias[key]
+													</span>
+												}
+											</span>
 											<a href="#life_diary" class="btn btn-floating secondary-content waves-effect red modal-trigger hide-on-small-and-down"
 											   onclick="open_life_diary('@key')" style="position: absolute; right: 120px;">
 												<i class="material-icons">event_note</i>

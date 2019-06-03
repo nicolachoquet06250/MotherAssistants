@@ -12,6 +12,9 @@ let session = require('express-session');
 
 let app = express();
 
+let server = require('http').createServer(app);
+let io = require('socket.io')(server);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'vash');
@@ -61,4 +64,4 @@ app.use((err, req, res, next) => {
 	res.render('errors/error');
 });
 
-module.exports = app;
+module.exports = {app, server, io};
