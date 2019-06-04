@@ -125,12 +125,6 @@ let setup_default = (after_init = null) =>
 				}).then(() => console.log('vous avez authorisé les notifications'))
 			}
 		}
-		function onSocketConnect(io, callback, events = []) {
-			let domain = main_domain();
-			let socket = io.connect(`http${domain !== 'localhost' ? 's' : ''}://${domain}${domain === 'localhost' ? ':3000' : ''}`);
-			socket.on('connect', callback);
-			events.forEach(event => socket.on(event.name, event.callback))
-		}
 		function OnLogged(callback) {
 			fetch('/connected',
 				{ method: 'post' })
@@ -138,17 +132,24 @@ let setup_default = (after_init = null) =>
 				.then(json => json.connected ? callback(json._id) : null);
 		}
 
-		// OnLogged(id => {
-		// 	// demande d'authorisation pour les notifications
-		// 	askNotificationAuthorisation();
-		// 	let domain = main_domain();
-		// 	let socket = io.connect(`http${domain !== 'localhost' ? 's' : ''}://${domain}${domain === 'localhost' ? ':3000' : ''}`);
-		// 	socket.on('connect', data => {
-		// 		socket.emit('join', {_id: id, message: 'Hello World from client'});
-		// 		// gérer la visibilité lors de la réception de nouveaux messages ou nouveaux médias
-		// 		visibilityGestion(data);
-		// 	});
-		// });
+		OnLogged(id => {
+			// demande d'authorisation pour les notifications
+			askNotificationAuthorisation();
+			let domain = main_domain();
+			let connection_string = `http${domain !== 'localhost' ? 's' : ''}://${domain}${domain === 'localhost' ? ':3000' : ''}`;
+
+			let socket = new FalseWebSocket(connection_string);
+
+			socket.on('parent_messages', (err, json, user, ws) => {
+				if(!err) (console.log(json));
+				else console.error(err, 'error');
+			});
+
+			socket.go({
+				connected: true,
+				_id: id
+			}, window);
+		});
 	});
 let setup_home = () => setup_default();
 let setup_sign_in = () => setup_default(() => {

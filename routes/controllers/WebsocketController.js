@@ -16,7 +16,24 @@ module.exports = class Websocket {
 
     static ParentMessages(req, res) {
         res.type('application/json').send({
-            nb_messages: 1
+            nb_messages: 1,
+            messages: [
+                {
+                    text: 'coucou'
+                },
+                {
+                    text: 'coucou'
+                },
+                {
+                    text: 'coucou'
+                },
+                {
+                    text: 'coucou'
+                },
+                {
+                    text: 'coucou'
+                }
+            ]
         });
         res.end();
     }
