@@ -1,29 +1,30 @@
-module.exports = io => {
-    io.on('connection', function (client) {
-        let connector = require('../database/mongodb_connector');
-        // un utilisateur se connecte sur le site
-        client.on('join', data => {
-            if(data._id) {
-                // si il est loggé
-                connector.onMongoConnect(_client => {
-                    let DAO = connector.getDao(_client, 'account');
-                    DAO.get({ _id: data._id }).then(accounts => {
-                        if(accounts.length !== 0) {
-                            let me = accounts.map(account => DAO.createEntity(account).json)[0];
-                            console.log(`${me.first_name} ${me.last_name.toUpperCase()} s'est connecté !`);
-                            if(data.message) {
-                                console.log(`il à envoyé le message: ${data.message}`);
-                            }
-                            client._id = data._id;
-                        }
-                    })
-                })
+module.exports = wsServer => {
+    function originIsAllowed(origin) {
+        return true;
+    }
+
+    wsServer.on('request', function(request) {
+        if (!originIsAllowed(request.origin)) {
+            // Make sure we only accept requests from an allowed origin
+            request.reject();
+            console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
+            return;
+        }
+
+        let connection = request.accept('echo-protocol', request.origin);
+        console.log((new Date()) + ' Connection accepted.');
+        connection.on('message', function(message) {
+            if (message.type === 'utf8') {
+                console.log('Received Message: ' + message.utf8Data);
+                connection.sendUTF(message.utf8Data);
+            }
+            else if (message.type === 'binary') {
+                console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
+                connection.sendBytes(message.binaryData);
             }
         });
-        client.on('new_message', data => {
-            if(client._id) {
-                client.broadcast.emit('new_message', data.message);
-            }
+        connection.on('close', function(reasonCode, description) {
+            console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
         });
     });
 };

@@ -80,7 +80,38 @@ let setup_default = (after_init = null) =>
 				console.log(`j'ai cliqué sur une notification`);
 			}
 		}
-
+		function visibilityGestion(data) {
+			switch (document.visibilityState) {
+				case "hidden":
+					// afficher une notification push avec action click
+					if (Notification.permission !== "granted") {
+						M.toast({
+							html: `Vous avez un nouveau message`
+						});
+					} else {
+						new Notification("MotherAssistants", {
+							icon: '/images/icons/profile-icon-grey-96x96.png',
+							body: `Vous avez un nouveau message`
+						});
+					}
+					break;
+				case "visible":
+					// afficher un toast avec action click
+					M.toast({
+						html: `Vous avez un nouveau message`
+					});
+					break;
+				case "prerender":
+					// afficher une notification push avec action click
+					if (Notification.permission === 'granted') {
+						new Notification("MotherAssistants", {
+							icon: '/images/icons/profile-icon-grey-96x96.png',
+							body: `Vous avez un nouveau message`
+						});
+					}
+					break;
+			}
+		}
 		function askNotificationAuthorisation() {
 			if(window.Notification !== undefined && Notification.permission !== "granted") {
 				Notification.requestPermission( function(status) {
@@ -94,65 +125,30 @@ let setup_default = (after_init = null) =>
 				}).then(() => console.log('vous avez authorisé les notifications'))
 			}
 		}
-
 		function onSocketConnect(io, callback, events = []) {
 			let domain = main_domain();
 			let socket = io.connect(`http${domain !== 'localhost' ? 's' : ''}://${domain}${domain === 'localhost' ? ':3000' : ''}`);
 			socket.on('connect', callback);
 			events.forEach(event => socket.on(event.name, event.callback))
 		}
+		function OnLogged(callback) {
+			fetch('/connected',
+				{ method: 'post' })
+				.then(r => r.json())
+				.then(json => json.connected ? callback(json._id) : null);
+		}
 
-		fetch('/connected', {
-			method: 'post'
-		}).then(r => r.json())
-			.then(json => {
-				if(json.connected) {
-					// demande d'authorisation pour les notifications
-					askNotificationAuthorisation();
-					onSocketConnect(io, data => {
-						socket.emit('join', {_id: json._id, message: 'Hello World from client'});
-					}, [{
-						name: 'new_message',
-						callback: data => {
-							console.log(data);
-							// gérer la visibilité lors de la réception de nouveaux messages ou nouveaux médias
-							switch (document.visibilityState) {
-									case "hidden":
-										// afficher une notification push avec action click
-										if(Notification.permission !== "granted") {
-											M.toast({
-												html: `Vous avez un nouveau message`,
-												onclick: () => onNotificationClick(data, 'toast')
-											});
-										}
-										else {
-											new Notification("MotherAssistants", {
-												icon: '/images/icons/profile-icon-grey-96x96.png',
-												body: `Vous avez un nouveau message`
-											}).addEventListener('click', () => onNotificationClick(data, 'browser'));
-										}
-										break;
-									case "visible":
-										// afficher un toast avec action click
-										M.toast({
-											html: `Vous avez un nouveau message`,
-											onclick: () => onNotificationClick(data, 'toast')
-										});
-										break;
-									case "prerender":
-										// afficher une notification push avec action click
-										if(Notification.permission === 'granted') {
-											new Notification("MotherAssistants", {
-												icon: '/images/icons/profile-icon-grey-96x96.png',
-												body: `Vous avez un nouveau message`
-											}).addEventListener('click', () => onNotificationClick(data, 'browser'));
-										}
-										break;
-								}
-						}
-					}]);
-				}
-			});
+		// OnLogged(id => {
+		// 	// demande d'authorisation pour les notifications
+		// 	askNotificationAuthorisation();
+		// 	let domain = main_domain();
+		// 	let socket = io.connect(`http${domain !== 'localhost' ? 's' : ''}://${domain}${domain === 'localhost' ? ':3000' : ''}`);
+		// 	socket.on('connect', data => {
+		// 		socket.emit('join', {_id: id, message: 'Hello World from client'});
+		// 		// gérer la visibilité lors de la réception de nouveaux messages ou nouveaux médias
+		// 		visibilityGestion(data);
+		// 	});
+		// });
 	});
 let setup_home = () => setup_default();
 let setup_sign_in = () => setup_default(() => {

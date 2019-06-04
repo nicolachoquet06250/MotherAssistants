@@ -25,7 +25,6 @@
 
 	<link rel='stylesheet'
 	      href='/stylesheets/style.css' />
-	<script src="/socket.io/socket.io.js"></script>
 	@html.block('additional_css')
 </head>
 <body>
@@ -98,8 +97,23 @@
 	<script src="/javascripts/main_domain.js"></script>
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script src="/javascripts/materializecss/materialize.min.js"></script>
+<!--	<script src="https://cdn.socket.io/socket.io-1.5.1.js"></script>-->
+	<script src="/socket.io-client/socket.io.js"></script>
 	<script src="/javascripts/script.js"></script>
 	<script>
+		window.onload = () => {
+			let domain = main_domain();
+			let connection_string = `ws${domain !== 'localhost' ? 's' : ''}://${domain}${domain === 'localhost' ? ':3000' : ''}`;
+			// io.set('transports', ['websocket']);
+			window.WebSocket = window.WebSocket || window.WebSocketServer;
+			let socket = new window.WebSocket(connection_string);
+			socket.onopen = e => {
+				console.log(e)
+			};
+			socket.onerror = err => {
+				console.error(err)
+			};
+		};
 		let current_page = '@model.current_page';
 		current_page ? setup(current_page) : setup(null);
 	</script>

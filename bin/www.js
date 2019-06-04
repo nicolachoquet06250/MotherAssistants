@@ -4,16 +4,6 @@
  * Module dependencies.
  */
 
-let App = require('../app');
-let app = App.app;
-
-let port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
-
-require('../modules/sockets/socket')(App.io);
-
-app.listen(port, '0.0.0.0');
-
 function normalizePort(val) {
   var port = parseInt(val, 10);
 
@@ -29,3 +19,18 @@ function normalizePort(val) {
 
   return false;
 }
+
+let App = require('../app');
+let app = App.app;
+let port = normalizePort(process.env.PORT || '3000');
+
+app.set('port', port);
+
+app.listen(port, '0.0.0.0');
+
+let wsServer = new App.WebSocketServer({
+  server: App.server,
+  autoAcceptConnections: true
+});
+
+require('../modules/sockets/socket')(wsServer);
