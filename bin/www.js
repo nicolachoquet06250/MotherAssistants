@@ -27,10 +27,3 @@ let port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 app.listen(port, '0.0.0.0');
-
-let wsServer = new App.WebSocketServer({
-  server: App.server,
-  autoAcceptConnections: true
-});
-
-require('../modules/sockets/socket')(wsServer);

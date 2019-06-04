@@ -9,7 +9,6 @@ let fileUpload = require('express-fileupload');
 let session = require('express-session');
 let app = express();
 let server = require('http').createServer(app);
-let WebSocketServer = require('ws').Server;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -53,4 +52,4 @@ app.use((err, req, res, next) => {
 	res.render('errors/error');
 });
 
-module.exports = {app, server, WebSocketServer};
+module.exports = {app, server};
