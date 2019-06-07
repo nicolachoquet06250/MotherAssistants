@@ -49,7 +49,10 @@ app.use((err, req, res, next) => {
 
 	// render the error page
 	res.status(err.status || 500);
-	res.render('errors/error');
+	res.render('errors/error', {
+		role: require('./modules/helpers/Session').GetMyRole(req),
+		current_page: 'error'
+	});
 });
 
 module.exports = {app, server};

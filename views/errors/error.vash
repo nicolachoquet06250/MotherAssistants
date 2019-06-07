@@ -1,3 +1,25 @@
-<h1>@model.message</h1>
-<h2>@model.error.status</h2>
-<pre>@model.error.stack</pre>
+@html.extend('layout', function(model) {
+  @html.block('content_ma', function(model) {
+    <h1>@model.message</h1>
+    <h2>@model.error.status</h2>
+    <pre>@model.error.stack</pre>
+  })
+
+  @html.block('content_parent', function(model) {
+    <h1>@model.message</h1>
+    <h2>@model.error.status</h2>
+    <pre>@model.error.stack</pre>
+  })
+
+  @html.block('content_anonymous', function(model) {
+    <h1>@model.message</h1>
+    <h2>@model.error.status</h2>
+    <pre>@model.error.stack</pre>
+  })
+
+  @html.block('content', function(model) {
+    <h1>@model.message</h1>
+    <h2>@model.error.status</h2>
+    <pre>@model.error.stack</pre>
+  })
+})

@@ -1,4 +1,7 @@
 <ul id="slide-out" class="sidenav">
+	@if(model.current_page === '') {
+		<li><a href="#!" class="active">Erreur <i class="material-icons">close</i></a></li>
+	}
 	@if(model.logged) {
 		<li><a href="/account/signOut">Déconnection <i class="material-icons">power_settings_new</i></a></li>
 	}
@@ -32,6 +35,9 @@
 		<a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 		<img src="/images/logo-web-transparent.png" class="brand-logo" style="height: 100%; cursor: pointer;" onclick="window.location.href = '/';" alt="MotherAssistants" />
 		<ul class="right hide-on-med-and-down">
+			@if(model.current_page === '') {
+				<li><a href="#!" class="active">Erreur</a></li>
+			}
 			<li><a href="/account/signOut"><i class="material-icons">power_settings_new</i></a></li>
 			@if(model.current_page === 'home') {
 				@{ var home_active = 'active'; }
