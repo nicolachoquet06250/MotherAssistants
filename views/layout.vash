@@ -2,9 +2,32 @@
 <html style="overflow: hidden;">
 <head>
 	<meta charset="utf-8"/>
-	@html.block('page_title', function(model) {
-		<title>@model.title</title>
-	})
+	@if(model.role !== null || model.role !== '') {
+		@if(model.role === 'anonymous') {
+			@html.block('page_title_anonymous', function(model) {
+				<title>@model.title</title>
+			})
+		}
+		else {
+			@if(model.role === 'parent') {
+				@html.block('page_title_parent', function(model) {
+					<title>@model.title</title>
+				})
+			}
+			else {
+				@if(model.role === 'ma') {
+					@html.block('page_title_ma', function(model) {
+						<title>@model.title</title>
+					})
+				}
+			}
+		}
+	}
+	else {
+		@html.block('page_title', function(model) {
+			<title>@model.title</title>
+		})
+	}
 
 	<link rel="icon" href="/images/favicon.ico" />
 	<link rel="manifest" href="/manifest.json" />

@@ -1,4 +1,12 @@
 @html.extend('layout', function(model) {
+	@html.block('page_title_ma', function(model) {
+		<title> Mon compte - @model.user.last_name.toUpperCase() @model.user.first_name </title>
+	})
+
+	@html.block('page_title_parent', function(model) {
+		<title> Mon compte - @model.user.last_name.toUpperCase() @model.user.first_name </title>
+	})
+
 	@html.block('content_anonymous', function(model) {
 		<div class="container">
 		<div class="row">

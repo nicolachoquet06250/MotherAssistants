@@ -1,4 +1,10 @@
 @html.extend('layout', function(model) {
+
+	@html.block('page_title_anonymous', function(model) {
+		<title> Je m'inscris </title>
+	})
+
+
 	@html.block('content_anonymous', function(model) {
 		<div class="container">
 			<div class="row">

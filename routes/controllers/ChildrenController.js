@@ -172,10 +172,15 @@ module.exports = class Children {
 
 	static Diary(req, res) {
 		let ctrl = new Children();
-		res.render('children/diary', options.BaseOptions
-			.append('title', 'Children Diary')
-			.append('current_page', 'diary')
-			.append('role', ctrl.Session.GetMyRole(req))
-			.append('logged', new Children().Session.Connected(req)).object)
+		if(!ctrl.Session.Connected(req)) res.redirect('/home');
+		else {
+			let children = ctrl.Session.GetMyRole(req) === 'ma' ? ctrl.Session.GetAccount(req).children : [ctrl.Session.GetAccount(req)];
+			res.render('children/diary', options.BaseOptions
+				.append('title', 'Children Diary')
+				.append('children', children)
+				.append('current_page', 'diary')
+				.append('role', ctrl.Session.GetMyRole(req))
+				.append('logged', new Children().Session.Connected(req)).object)
+		}
 	}
 };

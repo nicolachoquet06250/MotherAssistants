@@ -1,4 +1,13 @@
 @html.extend('layout', function(model) {
+
+	@html.block('page_title_ma', function(model) {
+		<title> Mes Enfants </title>
+	})
+
+	@html.block('page_title_parent', function(model) {
+		<title> Mon Enfant - @model.children[0].last_name.toUpperCase() @model.children[0].first_name </title>
+	})
+
 	@html.block('content_ma', function(model) {
 		<div class="container">
 			<div class="row">
