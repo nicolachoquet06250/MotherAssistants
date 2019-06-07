@@ -278,10 +278,11 @@ module.exports = class Account {
 				DAO.get({ _id: ctrl.Session.GetAccount(req).__id }).then(accounts => {
 					let me = accounts.map(account => DAO.createEntity(account).json)[0];
 					me.profile_pic = ctrl.Session.GetAccount(req).old_pre_updated_profile_pic;
-					DAO.update({ _id: ctrl.Session.GetAccount(req).__id }, { profile_pic: ctrl.Session.GetAccount(req).old_pre_updated_profile_pic }, true, false, r => {
-						console.log(r);
-						res.redirect('/account');
-					}, console.error);
+					DAO.update({ _id: ctrl.Session.GetAccount(req).__id }, { profile_pic: ctrl.Session.GetAccount(req).old_pre_updated_profile_pic }, true, false)
+						.then(r => {
+							console.log(r);
+							res.redirect('/account');
+						}).catch(console.error);
 				})
 			});
 		}

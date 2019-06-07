@@ -100,13 +100,14 @@ module.exports = class Children {
 					let me = accounts.map(account => AccountDAO.createEntity(account))[0];
 					me.children.push(child.json);
 
-					AccountDAO.update({ _id: ctrl.Session.GetAccount(req).__id}, { children: child.json }, false, true, r => {
-						client.close();
-						res.redirect('/children');
-					}, err => {
-						console.error(err);
-						client.close();
-					});
+					AccountDAO.update({ _id: ctrl.Session.GetAccount(req).__id}, { children: child.json }, false, true)
+						.then(r => {
+							client.close();
+							res.redirect('/children');
+						}).catch(err => {
+							console.error(err);
+							client.close();
+						});
 				});
 			});
 		}
@@ -129,13 +130,14 @@ module.exports = class Children {
 						}
 					}
 					children = tmp;
-					AccountDAO.update({ _id: ctrl.Session.GetAccount(req).__id}, { children:  children}, false, false, r => {
-						client.close();
-						res.redirect('/children');
-					}, err => {
-						console.error(err);
-						client.close();
-					});
+					AccountDAO.update({ _id: ctrl.Session.GetAccount(req).__id}, { children:  children}, false, false)
+						.then(r => {
+							client.close();
+							res.redirect('/children');
+						}).catch(err => {
+							console.error(err);
+							client.close();
+						});
 				});
 			});
 		}
