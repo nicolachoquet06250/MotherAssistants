@@ -27,7 +27,8 @@ module.exports = class Parents {
 
 	static Home(req, res) {
 		res.render('parents/index', options.BaseOptions
-			.append('title', 'Parents Home').object);
+			.append('title', 'Parents Home')
+			.append('role', new Parents().Session.GetMyRole(req)).object);
 	}
 
 	static Mother(req, res) {
@@ -44,6 +45,7 @@ module.exports = class Parents {
 		res.render('parents/messages', options.BaseOptions
 			.append('title', 'Parents Messages')
 			.append('current_page', 'messages')
+			.append('role', new Parents().Session.GetMyRole(req))
 			.append('logged', new Parents().Session.Connected(req))
 			.object)
 	}

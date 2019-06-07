@@ -1,5 +1,5 @@
 @html.extend('layout', function(model) {
-	@html.block('content', function(model) {
+	@html.block('content_anonymous', function(model) {
 		<div class="container-fluid">
 			<div class="row">
 				<div class="section white">
@@ -29,6 +29,82 @@
 									@presentation.forEach(function(item){
 										@item<br>
 									})
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	})
+
+	@html.block('content_parent', function(model) {
+		<div class="container-fluid">
+			<div class="row">
+				<div class="section white">
+					<div class="row container">
+						<div class="col-12">
+							<h1><img src="/images/logo-web-transparent.png" alt="@model.title" class="responsive-img" /></h1>
+							<p>
+								@{ var presentation = model.app.presentation }
+								@presentation.forEach(function(item){
+									@item<br>
+								})
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="parallax-container">
+					<div class="parallax">
+						<img src="/images/mon-enfant-ne-mange-que-chez-la-nounou.jpg" />
+					</div>
+				</div>
+				<div class="section white">
+					<div class="row container">
+						<div class="col-12">
+							<h2><img src="/images/logo-web-transparent.png" alt="@model.title" class="responsive-img" /></h2>
+							<p>
+								@{ var presentation = model.app.presentation }
+								@presentation.forEach(function(item){
+									@item<br>
+								})
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	})
+
+	@html.block('content_ma', function(model) {
+		<div class="container-fluid">
+			<div class="row">
+				<div class="section white">
+					<div class="row container">
+						<div class="col-12">
+							<h1><img src="/images/logo-web-transparent.png" alt="@model.title" class="responsive-img" /></h1>
+							<p>
+								@{ var presentation = model.app.presentation }
+								@presentation.forEach(function(item){
+									@item<br>
+								})
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="parallax-container">
+					<div class="parallax">
+						<img src="/images/mon-enfant-ne-mange-que-chez-la-nounou.jpg" />
+					</div>
+				</div>
+				<div class="section white">
+					<div class="row container">
+						<div class="col-12">
+							<h2><img src="/images/logo-web-transparent.png" alt="@model.title" class="responsive-img" /></h2>
+							<p>
+								@{ var presentation = model.app.presentation }
+								@presentation.forEach(function(item){
+									@item<br>
+								})
 							</p>
 						</div>
 					</div>

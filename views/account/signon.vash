@@ -1,5 +1,5 @@
 @html.extend('layout', function(model) {
-	@html.block('content', function(model) {
+	@html.block('content_anonymous', function(model) {
 		<div class="container">
 			<div class="row">
 				<div class="col s12 l6 offset-l3">

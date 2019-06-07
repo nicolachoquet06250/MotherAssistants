@@ -16,7 +16,8 @@ module.exports = class Account {
 				'/signOut': Account.Signout
 			},
 			post: {
-				'/signIn': Account.SignInPost,
+				'/signInMA': Account.SignInPostMA,
+				'/signInParent': Account.SignInPostParent,
 				'/signOn': Account.SignOnPost,
 				'/pre_update/profile_pic': Account.PreUpdateProfilePic,
 				'/update/profile_pic': Account.UpdateProfilePic,
@@ -39,63 +40,95 @@ module.exports = class Account {
 
 	static Home(req, res) {
 		let ctrl = new Account();
-		if(ctrl.Session.Connected(req)) {
+		if(!ctrl.Session.Connected(req)) res.redirect('/home');
+		else {
 			ctrl.connector.onMongoConnect(client => {
 				let DAO = ctrl.connector.getDao(client, Account.module);
+				let _id = ctrl.Session.GetMyRole(req) === 'ma'
+					? ctrl.Session.GetAccount(req).__id : ctrl.Session.GetAccount(req).motherassistant._id;
 
-				DAO.get({_id: req.session.__id}).then(accounts => {
+				DAO.get({ _id: _id }).then(accounts => {
+					let me = accounts.map(account => DAO.createEntity(account).json)[0];
+					console.log(me);
 					res.render('account/index', options.BaseOptions
 						.append('title', 'Mon compte')
 						.append('current_page', 'account')
-						.append('user', accounts.map(account => DAO.createEntity(account))[0])
+						.append('role', ctrl.Session.GetMyRole(req))
+						.append('user', me)
 						.append('logged', ctrl.Session.Connected(req))
 						.object);
-				}, () => res.redirect('/home'));
+				}, err => console.error(err.toString())/*res.redirect('/home')*/);
 			});
 		}
-		else res.redirect('/home')
 	}
 
 	static SignIn(req, res) {
 		let ctrl = new Account();
 		if(ctrl.Session.Connected(req)) res.redirect('/');
-		else res.render('account/signin', options.BaseOptions
-				.append('title', 'Account Get Signin')
-				.append('current_page', 'sign_in')
-				.append('logged', ctrl.Session.Connected(req))
-				.object);
+		else {
+			ctrl.connector.onMongoConnect(client => {
+				let DAO = ctrl.connector.getDao(client, 'account');
+				DAO.get({}).then(accounts => {
+					accounts = accounts.map(account => {
+						account = DAO.createEntity(account).json;
+						return {
+							first_name: account.first_name,
+							last_name: account.last_name,
+							profile_pic: account.profile_pic,
+							_id: account._id
+						}
+					});
+					res.render('account/signin', options.BaseOptions
+						.append('title', 'Account Get Signin')
+						.append('current_page', 'sign_in')
+						.append('role', ctrl.Session.GetMyRole(req))
+						.append('motherassistants', accounts)
+						.append('logged', ctrl.Session.Connected(req))
+						.object);
+				});
+			});
+		}
 	}
 
 	static Signout(req, res) {
-		delete req.session.__id;
+		new Account().Session.DeleteAccountSession(req);
 		res.redirect('/home');
+		res.end();
 	}
 
-	static SignInPost(req, res) {
+	static SignInPostMA(req, res) {
 		let ctrl = new Account();
 		let post = req.body;
 		if(post.email && post.password) {
 			ctrl.connector.onMongoConnect(client => {
 				let DAO = ctrl.connector.getDao(client, Account.module);
 				DAO.get({ email: post.email }).then(accounts => {
-					accounts = accounts.map(
-						account => DAO.createEntity(account));
-					if(ctrl.pwHelper
-						.comparePassword(post.password, accounts[0].password)) {
-						ctrl.Session.SaveAccountSession(req, accounts[0]);
+					let me = accounts.map(account => DAO.createEntity(account).json)[0];
+					if(ctrl.pwHelper.comparePassword(post.password, me.password)) {
+						me.role = 'ma';
+						ctrl.Session.SaveAccountSession(req, me);
 						res.redirect('/home');
+						res.end();
 					}
-					else res.render('account/signin', options.BaseOptions
-							.append('title', 'Account Post Signin')
-							.append('current_page', 'sign_in')
-							.append('logged', ctrl.Session.Connected(req))
-							.add_error({
-								message: 'Vous avez entré des identifiants incorrectes'
-							}).object);
+					else {
+						DAO.get({}).then(accounts => {
+							accounts = accounts.map(account => DAO.createEntity(account));
+							res.render('account/signin', options.BaseOptions
+								.append('title', 'Account Post Signin')
+								.append('current_page', 'sign_in')
+								.append('motherassistants', accounts)
+								.append('role', ctrl.Session.GetMyRole(req))
+								.append('logged', ctrl.Session.Connected(req))
+								.add_error({
+									message: 'Vous avez entré des identifiants incorrectes'
+								}).object);
+						});
+					}
 				}).catch(err => {
 					res.render('account/signin', options.BaseOptions
 						.append('title', 'Account Post Signin')
 						.append('current_page', 'sign_in')
+						.append('role', ctrl.Session.GetMyRole(req))
 						.append('logged', ctrl.Session.Connected(req))
 						.add_error({ message: err }).object);
 					res.end();
@@ -103,14 +136,87 @@ module.exports = class Account {
 				client.close();
 			});
 		}
-		else
+		else {
+			DAO.get({}).then(accounts => {
+				accounts = accounts.map(account => DAO.createEntity(account));
+				res.render('account/signin', options.BaseOptions
+					.append('title', 'Account Post Signin')
+					.append('current_page', 'sign_in')
+					.append('role', ctrl.Session.GetMyRole(req))
+					.append('logged', ctrl.Session.Connected(req))
+					.add_error({
+						message: `'Vous n'avez pas remplis tous le formulaire'`
+					}).object);
+			});
+		}
+	}
+
+	static SignInPostParent(req, res) {
+		let ctrl = new Account();
+		let post = req.body;
+		if(post.my_mother_assistant && post.password && post.phone) {
+			ctrl.connector.onMongoConnect(client => {
+				let DAO = ctrl.connector.getDao(client, Account.module);
+				DAO.get({ _id: post.my_mother_assistant }).then(accounts => {
+					let ma = accounts.map(account => DAO.createEntity(account).json)[0];
+					let _child = null;
+					for(let role in ma.children) {
+						for(let child_key in ma.children) {
+							let child = ma.children[child_key];
+							for(let role in child.family) {
+								if(child.family[role].phone === post.phone && child.family[role].password === post.password) {
+									_child = child;
+									_child._id = child_key;
+									_child.motherassistant = {
+										_id: ma._id
+									};
+									_child.parent_role = role;
+									_child.role = 'parent';
+									break;
+								}
+							}
+							if(_child !== null) break;
+						}
+						if(_child !== null) break;
+					}
+					if(_child !== null) {
+						ctrl.Session.SaveAccountSession(req, _child);
+						res.redirect('/home');
+					}
+					else {
+						res.render('account/signin', options.BaseOptions
+							.append('title', 'Account Post Signin')
+							.append('current_page', 'sign_in')
+							.append('role', ctrl.Session.GetMyRole(req))
+							.append('logged', ctrl.Session.Connected(req))
+							.add_error({
+								message: 'Vous avez entré des identifiants incorrectes'
+							}).object);
+					}
+				}).catch(err => {
+					res.render('account/signin', options.BaseOptions
+						.append('title', 'Account Post Signin')
+						.append('current_page', 'sign_in')
+						.append('role', ctrl.Session.GetMyRole(req))
+						.append('logged', ctrl.Session.Connected(req))
+						.add_error({
+							message: err
+						}).object);
+					res.end();
+				});
+				client.close();
+			});
+		}
+		else {
 			res.render('account/signin', options.BaseOptions
 				.append('title', 'Account Post Signin')
 				.append('current_page', 'sign_in')
+				.append('role', ctrl.Session.GetMyRole(req))
 				.append('logged', ctrl.Session.Connected(req))
 				.add_error({
 					message: `'Vous n'avez pas remplis tous le formulaire'`
 				}).object);
+		}
 	}
 
 	static SignOn(req, res) {
@@ -119,6 +225,7 @@ module.exports = class Account {
 		else res.render('account/signon', options.BaseOptions
 				.append('title', 'Account Get Signon')
 				.append('current_page', 'sign_on')
+				.append('role', ctrl.Session.GetMyRole(req))
 				.append('logged', ctrl.Session.Connected(req))
 				.object);
 	}
@@ -148,6 +255,7 @@ module.exports = class Account {
 			else res.status(403).render('errors/error', options.BaseOptions
 					.append('title', 'Forbidden')
 					.append('current_page', 'sign_on')
+					.append('role', ctrl.Session.GetMyRole(req))
 					.append('logged', ctrl.Session.Connected(req))
 					.append('message', `Le Formulaire n'est pas complet`)
 					.add_error({ status: 403, stack: '' }).object);
@@ -156,6 +264,7 @@ module.exports = class Account {
 			res.status(500).render('errors/error', options.BaseOptions
 				.append('title', 'Server Error')
 				.append('current_page', 'sign_on')
+				.append('role', ctrl.Session.GetMyRole(req))
 				.append('logged', ctrl.Session.Connected(req))
 				.append('message', `Le Formulaire n'est pas complet`)
 				.add_error({ status: 500, stack: '' }).object)
@@ -168,10 +277,10 @@ module.exports = class Account {
 		else {
 			ctrl.connector.onMongoConnect(client => {
 				let DAO = ctrl.connector.getDao(client, 'account');
-				DAO.get({ _id: req.session.__id }).then(accounts => {
+				DAO.get({ _id: ctrl.Session.GetAccount(req).__id }).then(accounts => {
 					let me = accounts.map(account => DAO.createEntity(account).json)[0];
-					me.profile_pic = req.session.old_pre_updated_profile_pic;
-					DAO.update({ _id: req.session.__id }, { profile_pic: req.session.old_pre_updated_profile_pic }, true, false, r => {
+					me.profile_pic = ctrl.Session.GetAccount(req).old_pre_updated_profile_pic;
+					DAO.update({ _id: ctrl.Session.GetAccount(req).__id }, { profile_pic: ctrl.Session.GetAccount(req).old_pre_updated_profile_pic }, true, false, r => {
 						console.log(r);
 						res.redirect('/account');
 					}, console.error);
@@ -196,7 +305,7 @@ module.exports = class Account {
 								res.end();
 							}
 							else {
-								req.session.old_pre_updated_profile_pic = `${req.files.profile_pic.md5}.${Account.mimes2ext[req.files.profile_pic.mimetype]}`;
+								ctrl.Session.UpdateAccountProp(req, 'old_pre_updated_profile_pic', `${req.files.profile_pic.md5}.${Account.mimes2ext[req.files.profile_pic.mimetype]}`);
 								res.type('application/json');
 								res.send({ success: true, url: `/uploads/${req.files.profile_pic.md5}.${Account.mimes2ext[req.files.profile_pic.mimetype]}` });
 								res.end();
@@ -207,7 +316,7 @@ module.exports = class Account {
 	}
 
 	static DeletePreUpdatedProfilePic(req, res) {
-		delete req.session.old_pre_updated_profile_pic;
+		delete new Account().Session.GetAccount(req).old_pre_updated_profile_pic;
 		res.send('');
 	}
 };

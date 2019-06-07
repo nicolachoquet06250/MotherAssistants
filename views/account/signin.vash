@@ -1,5 +1,5 @@
 @html.extend('layout', function(model) {
-	@html.block('content', function(model) {
+	@html.block('content_anonymous', function(model) {
 		<div class="container">
 			<div class="row">
 				<div class="col s12 l6 offset-l3">
@@ -9,24 +9,58 @@
 							<span class="card-title black-text">Je me connecte</span>
 						</div>
 						<div class="card-content">
-							<form id="sign-in" method="post" action="/account/signIn" class="row">
+							<div class="row">
 								<div class="input-field col s12">
-									<input id="email" name="email" type="email" class="validate" required>
-									<label for="email">Email</label>
+									<select name="role" id="role">
+										<option value="" disabled selected>En tant que</option>
+										<option value="ma">Assistante Maternelle</option>
+										<option value="parent">Parent</option>
+									</select>
+									<label for="role">Je me connecte</label>
+								</div>
+							</div>
+							<form id="ma-sign-in" method="post" action="/account/signInMA" class="row hide">
+								<div class="input-field col s12">
+										<input id="email" name="email" type="email" class="validate">
+										<label for="email">Email</label>
+									</div>
+									<div class="input-field col s12">
+										<input id="am_password" name="password" type="password" class="validate">
+										<label for="am_password">Mot de passe</label>
+									</div>
+							</form>
+							<form id="parent-sign-in" method="post" action="/account/signInParent" class="row hide">
+								@if(model.motherassistants) {
+									<div class="input-field col s12">
+										<select name="my_mother_assistant" class="icons" id="my-mother-assistant">
+											<option value="" disabled selected>Votre assistante maternelle</option>
+											@model.motherassistants.forEach(function(ma) {
+												<option value="@ma._id" data-icon="/uploads/@ma.profile_pic">@ma.last_name @ma.first_name</option>
+											})
+										</select>
+										<label for="role">Votre assistante maternel</label>
+									</div>
+								}
+								<div class="input-field col s12">
+									<input id="phone" name="phone" type="tel" class="validate">
+									<label for="phone">Téléphone</label>
 								</div>
 								<div class="input-field col s12">
-									<input id="password" name="password" type="password" class="validate" required>
-									<label for="password">Mot de passe</label>
+									<input id="parent_password" name="password" type="password" class="validate">
+									<label for="parent_password">Mot de passe</label>
 								</div>
+							</form>
+							<div class="row">
 								@if(model.error) {
 									<div class="col s12">
 										<i class="red-text">@model.error.message</i>
 									</div>
 								}
-							</form>
+							</div>
 						</div>
 						<div class="card-action">
-							<button onclick="document.querySelector('#sign-in').submit()" class="btn">Se connecter</button>
+							<button onclick="document.querySelector('#ma-sign-in').submit()" id="ma-submit-btn" class="btn submit-btn hide">Se connecter</button>
+							<button onclick="document.querySelector('#parent-sign-in').submit()" id="parent-submit-btn" class="btn submit-btn hide">Se connecter</button>
 						</div>
 					</div>
 				</div>

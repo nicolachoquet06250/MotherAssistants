@@ -46,21 +46,27 @@ if ('serviceWorker' in navigator) {
 		.catch(error => console.log('Error registering the Service Worker: ' + error));
 }
 
+let roles = [
+	'anonymous',
+	'parent',
+	'ma',
+];
+
 let pages = [
 	'home',
 	'sign_in',
 	'sign_on',
 	'account',
 	'children',
-	'contacts'
+	'contacts',
 ];
 
-let setup_default = (after_init = null) =>
+let setup_default = (role, after_init = null) =>
 	$(document).ready(() => {
 		$('.parallax').parallax();
 		$('.sidenav').sidenav();
 		$('.dropdown-trigger').dropdown();
-		if (after_init !== null) after_init();
+		if (after_init !== null) after_init(role);
 		$('.loader:first').fadeOut(1000, () =>  $('html').css('overflow-y', 'auto'));
 
 		function onNotificationClick(data, type) {
@@ -140,36 +146,41 @@ let setup_default = (after_init = null) =>
 
 			let socket = new FalseWebSocket(connection_string);
 
-			socket.on('parent_messages', (err, json, user, ws) => {
-				if(!err) (console.log(json));
-				else console.error(err, 'error');
-			});
+			let activate = false;
+
+			setSocketEvents(socket, activate);
 
 			socket.go({
 				connected: true,
 				_id: id
-			}, window);
+			}, window, activate);
 		});
 	});
-let setup_home = () => setup_default();
-let setup_sign_in = () => setup_default(() => {
-	$('.datepicker').datepicker({
-		format: 'dd/mm/yyyy'
-	});
+let setup_home = role => setup_default(role);
+let setup_sign_in = role => setup_default(role, role => {
+	$('select').formSelect();
+	let role_elem = document.querySelector('#role');
+	role_elem.addEventListener('change', () => {
+		document.querySelectorAll('form').forEach(form => {
+			if(!form.classList.contains('hide')) form.classList.add('hide');
+		});
+		document.querySelectorAll('.submit-btn').forEach(btn => {
+			if(!btn.classList.contains('hide')) btn.classList.add('hide');
+		});
+		document.querySelector(`#${role_elem.value}-sign-in`).classList.remove('hide');
+		document.querySelector(`#${role_elem.value}-submit-btn`).classList.remove('hide');
+	})
 });
-let setup_sign_on = () => setup_default(() => {
+let setup_sign_on = role => setup_default(role, role => {
 	change_label_approvals(document.querySelector('#nb_approvals').value);
 	$('.datepicker').datepicker({
 		format: 'dd/mm/yyyy'
 	});
 });
-let setup_account = () => setup_default(() => {
+let setup_account = role => setup_default(role, role => {
 	let profile_pic_resize = () => document.querySelector('.profile-pic').style.height = document.querySelector('.profile-pic').offsetWidth + 'px';
 	profile_pic_resize();
 	change_label_approvals(document.querySelector('#nb_approvals').value);
-	$('.datepicker').datepicker({
-		format: 'dd/mm/yyyy'
-	});
 	window.onresize = () => {
 		profile_pic_resize();
 	};
@@ -210,7 +221,7 @@ let setup_account = () => setup_default(() => {
 
 	$('#cancel_update_profile_pic').on('click', e => fetch(`/account/pre_update/profile_pic`, { method: 'post' }).then(() => {}));
 });
-let setup_children = () => setup_default(() => {
+let setup_children = role => setup_default(role, role => {
 	$('.modal').modal();
 
 	let generate_password = (nb_chars_in_password) => {
@@ -447,7 +458,7 @@ style="${style}">
 		container.setAttribute('parent-role', 'family');
 	};
 });
-let setup_contacts = () => setup_default(() => {
+let setup_contacts = role => setup_default(role, role => {
 	document.querySelector('#contact_form').addEventListener('submit', e => {
 		e.preventDefault();
 		let options = {
@@ -475,5 +486,5 @@ let setup_contacts = () => setup_default(() => {
 			});
 	});
 });
-let setup = page_name => pages.includes(page_name) ? eval(`setup_${page_name}()`) : setup_default();
+let setup = (page_name, role) => pages.includes(page_name) ? eval(`setup_${page_name}('${role}')`) : setup_default(role);
 let change_label_approvals = new_value => document.querySelector('label[for=nb_approvals]').innerHTML = new_value;

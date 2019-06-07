@@ -1,0 +1,88 @@
+<ul id="slide-out" class="sidenav">
+	@if(model.logged) {
+		<li><a href="/account/signOut">Déconnection <i class="material-icons">power_settings_new</i></a></li>
+	}
+	@if(model.current_page === 'home') {
+		@{ var home_active = 'active'; }
+	}
+	<li><a href="/home" class="@home_active">Accueil <i class="material-icons">home</i></a></li>
+	@if(model.logged === true) {
+		@if(model.current_page === 'account') {
+			@{ var account_active = 'active'; }
+		}
+		<li><a href="/account" class="@account_active">Mon compte <i class="material-icons">account_circle</i></a></li>
+	@if(model.current_page === 'children') {
+			@{ var children_active = 'active'; }
+		}
+		<li><a href="/children" class="@children_active">Mes enfants <i class="material-icons">child_care</i></a></li>
+		@if(model.current_page === 'messages') {
+			@{ var messages_active = 'active'; }
+		}
+		<li><a href="/parents/messages" class="@messages_active">Messages <i class="material-icons">chat</i></a></li>
+		@if(model.current_page === 'diary') {
+			@{ var diary_active = 'active'; }
+		}
+		<li><a href="/children/diary" class="@diary_active">Cahier de vie <i class="material-icons">event_note</i></a></li>
+	}
+	else {
+		@if(model.current_page === 'sign_in') {
+			@{ var signin_active = 'active'; }
+		}
+		<li><a href="/account/signIn" class="@signin_active">Je me connecte <i class="material-icons">power_settings_new</i></a></li>
+		@if(model.current_page === 'sign_on') {
+			@{ var signon_active = 'active'; }
+		}
+		<li><a href="/account/signOn" class="@signon_active">Je m'inscris <i class="material-icons">power</i></a></li>
+	}
+	@if(model.current_page === 'contacts') {
+		@{ var contacts_active = 'active'; }
+	}
+	<li><a href="/contacts" class="@contacts_active">Contacts <i class="material-icons">contact_mail</i></a></li>
+</ul>
+<nav>
+	<div class="nav-wrapper">
+		<a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+		<img src="/images/logo-web-transparent.png" class="brand-logo" style="height: 100%; cursor: pointer;" onclick="window.location.href = '/';" alt="MotherAssistants" />
+		<ul class="right hide-on-med-and-down">
+			@if(model.logged) {
+				<li><a href="/account/signOut"><i class="material-icons">power_settings_new</i></a></li>
+			}
+			@if(model.current_page === 'home') {
+				@{ var home_active = 'active'; }
+			}
+			<li><a href="/home" class="@home_active">Accueil</a></li>
+			@if(model.logged === true) {
+				@if(model.current_page === 'account') {
+					@{ var account_active = 'active'; }
+				}
+				<li><a href="/account" class="@account_active">Mon compte</a></li>
+				@if(model.current_page === 'children') {
+					@{ var children_active = 'active'; }
+				}
+				<li><a href="/children" class="@children_active">Mes enfants</a></li>
+				@if(model.current_page === 'messages') {
+					@{ var messages_active = 'active'; }
+				}
+				<li><a href="/parents/messages" class="@messages_active">Messages</a></li>
+				@if(model.current_page === 'diary') {
+					@{ var diary_active = 'active'; }
+				}
+				<li><a href="/children/diary" class="@diary_active">Cahier de vie</a></li>
+			}
+			else {
+				@if(model.current_page === 'sign_in') {
+					@{ var signin_active = 'active'; }
+				}
+				<li><a href="/account/signIn" class="@signin_active">Je me connecte</a></li>
+				@if(model.current_page === 'sign_on') {
+					@{ var signon_active = 'active'; }
+				}
+				<li><a href="/account/signOn" class="@signon_active">Je m'inscris</a></li>
+			}
+			@if(model.current_page === 'contacts') {
+				@{ var contacts_active = 'active'; }
+			}
+			<li><a href="/contacts" class="@contacts_active">Contacts</a></li>
+		</ul>
+	</div>
+</nav>

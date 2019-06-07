@@ -28,6 +28,7 @@ module.exports = class Home {
 	}
 
 	static home(req, res) {
+		let ctrl = new Home();
 		res.render('home/index', options.BaseOptions
 			.append('title', 'Mother-Assistants')
 			.append('app', {
@@ -35,14 +36,18 @@ module.exports = class Home {
 					`ainsi, vous pourez communiquer avec les parents sur l'application, poster des photos accessibles par les 2 parents, ainsi que noter les différents activitées pratiqués la journée, les repas, les besoins, etc`,
 					`tout ça sous forme de calandrier, ce qui rend plus simple la recherche d'un évenement en particulier `]
 			})
+			.append('role', new Home().Session.GetMyRole(req))
 			.append('current_page', 'home')
+			.append('role', ctrl.Session.GetMyRole(req))
 			.append('logged', new Home().Session.Connected(req)).object);
 	}
 
 	static contacts(req, res) {
+		let ctrl = new Home();
 		res.render('home/contacts', options.BaseOptions
 			.append('title', 'Contactez nous')
 			.append('current_page', 'contacts')
+			.append('role', ctrl.Session.GetMyRole(req))
 			.append('logged', new Home().Session.Connected(req)).object)
 	}
 
@@ -105,11 +110,19 @@ module.exports = class Home {
 	}
 
 	static connectedPost(req, res) {
+		let options = require('../../modules/helpers/ViewOptions');
 		let ctrl = new Home();
 		res.type('application/json');
-		res.send({
-			connected: ctrl.Session.Connected(req),
-			_id: req.session.__id
-		})
+		if(ctrl.Session.Connected(req)) {
+			res.send({
+				connected: ctrl.Session.Connected(req),
+				_id: ctrl.Session.GetAccount(req).__id
+			});
+		}
+		else {
+			res.send({
+				connected: ctrl.Session.Connected(req)
+			});
+		}
 	}
 };

@@ -29,27 +29,42 @@ module.exports = class Children {
 
 	static Home(req, res) {
 		let ctrl = new Children();
+		let children_keys = 0;
 		if(!ctrl.Session.Connected(req)) res.redirect('/home');
 		else {
 			ctrl.connector.onMongoConnect(client => {
+				let child = [];
 				let DAO = ctrl.connector.getDao(client, 'account');
-
-				DAO.get({
-					_id: req.session.__id
-				}, { children: 1 }).then(accounts => {
-					let me = accounts.map(account => DAO.createEntity(account).json)[0];
-					let children_keys = [];
-					for(let key in me.children) {
-						children_keys.push(1);
-					}
+				if(ctrl.Session.GetMyRole(req) === 'ma') {
+					DAO.get({ _id: ctrl.Session.GetAccount(req).__id }, { children: 1 })
+						.then(accounts => {
+							let me = accounts.map(account => DAO.createEntity(account).json)[0];
+							children_keys = [];
+							for (let key in me.children) {
+								children_keys.push(1);
+							}
+							res.render('children/index', options.BaseOptions
+								.append('title', 'Mes enfants')
+								.append('children', me.children)
+								.append('nb_global_messages', children_keys)
+								.append('nb_global_medias', children_keys)
+								.append('current_page', 'children')
+								.append('role', ctrl.Session.GetMyRole(req))
+								.append('logged', ctrl.Session.Connected(req)).object);
+						});
+				}
+				else if (ctrl.Session.GetMyRole(req) === 'parent') {
 					res.render('children/index', options.BaseOptions
 						.append('title', 'Mes enfants')
-						.append('children', me.children)
-						.append('nb_global_messages', children_keys)
-						.append('nb_global_medias', children_keys)
+						.append('children', [
+							ctrl.Session.GetAccount(req)
+						])
+						.append('nb_global_messages', 0)
+						.append('nb_global_medias', 0)
 						.append('current_page', 'children')
+						.append('role', ctrl.Session.GetMyRole(req))
 						.append('logged', ctrl.Session.Connected(req)).object);
-				});
+				}
 			});
 		}
 	}
@@ -61,7 +76,7 @@ module.exports = class Children {
 			ctrl.connector.onMongoConnect(client => {
 				let AccountDAO = ctrl.connector.getDao(client, 'account');
 				let post = req.body;
-				AccountDAO.get({ _id: req.session.__id }).then(accounts => {
+				AccountDAO.get({ _id: ctrl.Session.GetAccount(req).__id }).then(accounts => {
 					let child = ctrl.connector.getDao(client, 'child').createEntity({
 						first_name: post.first_name,
 						last_name: post.last_name,
@@ -86,7 +101,7 @@ module.exports = class Children {
 					let me = accounts.map(account => AccountDAO.createEntity(account))[0];
 					me.children.push(child.json);
 
-					AccountDAO.update({ _id: req.session.__id}, { children: child.json }, false, true, r => {
+					AccountDAO.update({ _id: ctrl.Session.GetAccount(req).__id}, { children: child.json }, false, true, r => {
 						client.close();
 						res.redirect('/children');
 					}, err => {
@@ -105,7 +120,7 @@ module.exports = class Children {
 			ctrl.connector.onMongoConnect(client => {
 				let AccountDAO = ctrl.connector.getDao(client, 'account');
 				let post = req.body;
-				AccountDAO.get({ _id: req.session.__id }).then(accounts => {
+				AccountDAO.get({ _id: ctrl.Session.GetAccount(req).__id }).then(accounts => {
 					let children = accounts.map(account => AccountDAO.createEntity(account))[0].children;
 					delete children[parseInt(post.id)];
 					let tmp = [];
@@ -115,7 +130,7 @@ module.exports = class Children {
 						}
 					}
 					children = tmp;
-					AccountDAO.update({ _id: req.session.__id}, { children:  children}, false, false, r => {
+					AccountDAO.update({ _id: ctrl.Session.GetAccount(req).__id}, { children:  children}, false, false, r => {
 						client.close();
 						res.redirect('/children');
 					}, err => {
@@ -133,7 +148,7 @@ module.exports = class Children {
 		else {
 			ctrl.connector.onMongoConnect(client => {
 				let DAO = ctrl.connector.getDao(client, 'account');
-				DAO.get({_id: req.session.__id}).then(accounts => {
+				DAO.get({_id: ctrl.Session.GetAccount(req).__id}).then(accounts => {
 					res.send(accounts.map(account =>
 						DAO.createEntity(account).json)[0].children[parseInt(req.query.id)]);
 					client.close();
@@ -143,19 +158,25 @@ module.exports = class Children {
 	}
 
 	static Son(req, res) {
+		let ctrl = new Children();
 		res.render('children/son', options.BaseOptions
-			.append('title', 'Children Son').object);
+			.append('title', 'Children Son')
+			.append('role', ctrl.Session.GetMyRole(req)).object);
 	}
 
 	static Daughter(req, res) {
+		let ctrl = new Children();
 		res.render('children/daughter', options.BaseOptions
-			.append('title', 'Children Daughter').object);
+			.append('title', 'Children Daughter')
+			.append('role', ctrl.Session.GetMyRole(req)).object);
 	}
 
 	static Diary(req, res) {
+		let ctrl = new Children();
 		res.render('children/diary', options.BaseOptions
 			.append('title', 'Children Diary')
 			.append('current_page', 'diary')
+			.append('role', ctrl.Session.GetMyRole(req))
 			.append('logged', new Children().Session.Connected(req)).object)
 	}
 };

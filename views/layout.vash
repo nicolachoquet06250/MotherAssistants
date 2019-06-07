@@ -25,7 +25,24 @@
 
 	<link rel='stylesheet'
 	      href='/stylesheets/style.css' />
-	@html.block('additional_css')
+	@if(model.role !== null || model.role !== '') {
+		@if(model.role === 'anonymous') {
+			@html.block('additional_css_anonymous')
+		}
+		else {
+			@if(model.role === 'parent') {
+				@html.block('additional_css_parent')
+			}
+			else {
+				@if(model.role === 'ma') {
+					@html.block('additional_css_ma')
+				}
+			}
+		}
+	}
+	else {
+		@html.block('additional_css')
+	}
 </head>
 <body>
 	<div class="loader red">
@@ -34,12 +51,46 @@
 		})
 	</div>
 	<header>
-		@html.block('menu', function(model) {
-			@html.include('includes/menus/top_menu')
-		})
+		@if(model.role !== null || model.role !== '') {
+			@if(model.role === 'anonymous') {
+				@html.include('includes/menus/top_menu_anonymous')
+			}
+			else {
+				@if(model.role === 'parent') {
+					@html.include('includes/menus/top_menu_parent')
+				}
+				else {
+					@if(model.role === 'ma') {
+						@html.include('includes/menus/top_menu_ma')
+					}
+				}
+			}
+		}
+		else {
+			@html.block('menu', function(model) {
+				@html.include('includes/menus/top_menu')
+			})
+		}
 	</header>
 	<main>
-		@html.block('content')
+		@if(model.role !== null || model.role !== '') {
+			@if(model.role === 'anonymous') {
+				@html.block('content_anonymous')
+			}
+			else {
+				@if(model.role === 'parent') {
+					@html.block('content_parent')
+				}
+				else {
+					@if(model.role === 'ma') {
+						@html.block('content_ma')
+					}
+				}
+			}
+		}
+		else {
+			@html.block('content')
+		}
 		<div class="modal-container">
 			<div id="messages" class="modal bottom-sheet messages">
 				<div class="container">
@@ -88,7 +139,24 @@
 					</div>
 				</div>
 			</div>
-			@html.block('modals')
+			@if(model.role !== null) {
+				@if(model.role === 'anonymous') {
+					@html.block('modals_anonymous')
+				}
+				else {
+					@if(model.role === 'parent') {
+						@html.block('modals_parent')
+					}
+					else {
+						@if(model.role === 'ma') {
+							@html.block('modals_ma')
+						}
+					}
+				}
+			}
+			else {
+				@html.block('modals')
+			}
 		</div>
 	</main>
 	@html.block('footer', function(model) {
@@ -98,11 +166,30 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script src="/javascripts/materializecss/materialize.min.js"></script>
 	<script src="/javascripts/FalseWebSockets/WebSocket.js"></script>
+	<script src="/javascripts/setSocketEvents.js"></script>
 	<script src="/javascripts/script.js"></script>
 	<script>
 		let current_page = '@model.current_page';
-		current_page ? setup(current_page) : setup(null);
+		let role = '@model.role';
+		current_page ? setup(current_page, role) : setup(null, role);
 	</script>
-	@html.block('additional_js')
+	@if(model.role !== null || model.role !== '') {
+		@if(model.role === 'anonymous') {
+			@html.block('additional_js_anonymous')
+		}
+		else {
+			@if(model.role === 'parent') {
+				@html.block('additional_js_parent')
+			}
+			else {
+				@if(model.role === 'ma') {
+					@html.block('additional_js_ma')
+				}
+			}
+		}
+	}
+	else {
+		@html.block('additional_js')
+	}
 </body>
 </html>
