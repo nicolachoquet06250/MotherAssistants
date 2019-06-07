@@ -43,21 +43,19 @@ module.exports = class Account {
 		if(!ctrl.Session.Connected(req)) res.redirect('/home');
 		else {
 			ctrl.connector.onMongoConnect(client => {
-				let DAO = ctrl.connector.getDao(client, Account.module);
-				let _id = ctrl.Session.GetMyRole(req) === 'ma'
-					? ctrl.Session.GetAccount(req).__id : ctrl.Session.GetAccount(req).motherassistant._id;
-
-				DAO.get({ _id: _id }).then(accounts => {
-					let me = accounts.map(account => DAO.createEntity(account).json)[0];
-					console.log(me);
-					res.render('account/index', options.BaseOptions
-						.append('title', 'Mon compte')
-						.append('current_page', 'account')
-						.append('role', ctrl.Session.GetMyRole(req))
-						.append('user', me)
-						.append('logged', ctrl.Session.Connected(req))
-						.object);
-				}, err => console.error(err.toString())/*res.redirect('/home')*/);
+				let me = ctrl.Session.GetAccount(req);
+				if(ctrl.Session.GetMyRole(req) === 'parent') {
+					let parent_role = me.parent_role;
+					me = me.family[me.parent_role];
+					me.parent_role = parent_role;
+				}
+				res.render('account/index', options.BaseOptions
+					.append('title', 'Mon compte')
+					.append('current_page', 'account')
+					.append('role', ctrl.Session.GetMyRole(req))
+					.append('user', me)
+					.append('logged', ctrl.Session.Connected(req))
+					.object);
 			});
 		}
 	}

@@ -33,7 +33,6 @@ module.exports = class Children {
 		if(!ctrl.Session.Connected(req)) res.redirect('/home');
 		else {
 			ctrl.connector.onMongoConnect(client => {
-				let child = [];
 				let DAO = ctrl.connector.getDao(client, 'account');
 				if(ctrl.Session.GetMyRole(req) === 'ma') {
 					DAO.get({ _id: ctrl.Session.GetAccount(req).__id }, { children: 1 })

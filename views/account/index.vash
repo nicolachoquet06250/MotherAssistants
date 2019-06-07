@@ -10,10 +10,6 @@
 					<div class="row profile-pic-container">
 						<div class="col offset-s4 s4 offset-m8 m3 offset-l8 l3" style="height: 100%;">
 							@if(model.user && model.user.profile_pic !== null) {
-							<script>
-								let profile_pic = '@model.user.profile_pic';
-								console.log(profile_pic);
-							</script>
 							@{ var profile_pic = '/uploads/' + model.user.profile_pic }
 							}
 							else {
@@ -87,10 +83,6 @@
 						<div class="row profile-pic-container">
 							<div class="col offset-s4 s4 offset-m8 m3 offset-l8 l3" style="height: 100%;">
 								@if(model.user && model.user.profile_pic !== null) {
-									<script>
-										let profile_pic = '@model.user.profile_pic';
-										console.log(profile_pic);
-									</script>
 									@{ var profile_pic = '/uploads/' + model.user.profile_pic }
 								}
 								else {
@@ -159,65 +151,45 @@
 				<div class="col s12 offset-l1 l10">
 					<div class="card">
 						<div class="card-image">
-							<img src="/images/places-maxi-assistante-maternelle.png" />
-						</div>
-						<div class="row profile-pic-container">
-							<div class="col offset-s4 s4 offset-m8 m3 offset-l8 l3" style="height: 100%;">
-								@if(model.user && model.user.profile_pic !== null) {
-								<script>
-									let profile_pic = '@model.user.profile_pic';
-									console.log(profile_pic);
-								</script>
-								@{ var profile_pic = '/uploads/' + model.user.profile_pic }
-								}
-								else {
-								@{ var profile_pic = '/images/default_profile_pic.png' }
-								}
-								<div class="profile-pic" style="background-image: url('@profile_pic');">
-									<div class="profile-pic-toolbar valign-wrapper">
-										<a href="#update_profile_pic" class="modal-trigger" style="position: absolute; right: 15px;">
-											<i class="material-icons white-text">update</i>
-										</a>
-									</div>
+							<div class="row">
+								<div class="col s8 offset-s2">
+									<img src="/images/places-maxi-assistante-maternelle.png" />
 								</div>
 							</div>
 						</div>
+						<div class="row profile-pic-container">
+							<div class="col offset-s4 s4 offset-m8 m3 offset-l8 l3" style="height: 100%;">
+								@{ var profile_pic = '/images/default_profile_pic.png' }
+								<div class="profile-pic" style="background-image: url('@profile_pic');"></div>
+							</div>
+						</div>
 						<div class="card-content">
-									<span class="card-title black-text">
-										Mon compte
-										<a href="/account/signout" class="black-text" style="position: absolute; margin-left: 10px">
-											<i class="material-icons" style="font-size: 30px;">power_settings_new</i>
-										</a>
-									</span>
+							<span class="card-title black-text">
+								Mon compte ( <span id="parent_role" data-role="@model.user.parent_role"></span> )
+								<a href="/account/signout" class="black-text" style="position: absolute; margin-left: 10px">
+									<i class="material-icons" style="font-size: 30px;">power_settings_new</i>
+								</a>
+							</span>
 							<form id="sign-on" method="post" action="/account/signOn" enctype="multipart/form-data" class="row">
 								<div class="input-field col s12 m6">
-									<input id="last_name" name="last_name" value="@model.user.last_name" type="text" class="validate">
+									<input id="last_name" name="last_name" value="@model.user.last_name" type="text" class="validate valid">
 									<label for="last_name">Nom</label>
 								</div>
 								<div class="input-field col s12 m6">
-									<input id="first_name" name="first_name" value="@model.user.first_name" type="text" class="validate">
+									<input id="first_name" name="first_name" value="@model.user.first_name" type="text" class="validate valid">
 									<label for="first_name">Prénom</label>
 								</div>
 								<div class="input-field col s12">
-									<input id="email" name="email" value="@model.user.email" type="email" class="validate">
-									<label for="email">Email</label>
+									<input id="phone" name="phone" value="@model.user.phone" type="tel" class="validate valid">
+									<label for="phone">Téléphone</label>
 								</div>
 								<div class="input-field col s12 m6">
-									<input id="password" name="password" type="password" class="validate">
+									<input id="password" name="password" type="password" class="validate valid">
 									<label for="password">Mot de passe</label>
 								</div>
 								<div class="input-field col s12 m6">
 									<input id="check_password" type="password" class="validate">
 									<label for="check_password">Vérification du mot de passe</label>
-								</div>
-								<div class="input-field col s12">
-									<input id="birth_day" name="birth_day" value="@model.user.birth_day" type="date" class="validate">
-									<label for="birth_day">Date de naissance</label>
-								</div>
-								<div class="input-field col s12">
-									<input id="nb_approvals" name="nb_approvals" type="range" min="1" max="4" value="@model.user.nb_approvals"
-									       onchange="change_label_approvals(this.value)">
-									<label for="nb_approvals" style="margin-top: -20px;"></label>
 								</div>
 								<div class="input-field col s12">
 									<input type="submit" class="btn btn-flat" value="Sauvegarder" />
@@ -226,49 +198,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-	})
-
-	@html.block('modals_anonymous', function(model) {
-		@if(model.user && model.user.profile_pic !== null) {
-			@{ var profile_pic = '/uploads/' + model.user.profile_pic }
-		}
-		else {
-			@{ var profile_pic = '/images/default_profile_pic.png' }
-		}
-		<div id="update_profile_pic" class="modal">
-			<div class="modal-content">
-				<div class="container">
-					<div class="row">
-						<div class="col s12">
-							<h4>Photo de profil</h4>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col s12 m6 valign-wrapper" style="height: 100%;">
-							<div style="width: 250px; height: 250px; background-size: contain; background-repeat: no-repeat; background-position: center; border: 1px solid black; background-image: url('@profile_pic');" id="profile_pic_into_to_change"></div>
-						</div>
-						<div class="col s12 m6" style="height: 100%;">
-							<form method="post" id="form_update_profile_pic" action="/account/update/profile_pic" enctype="multipart/form-data">
-								<div class="file-field input-field">
-									<div class="btn">
-										<span>Uploader</span>
-										<input type="file" name="profile_pic" id="profile_pic_to_update">
-									</div>
-									<div class="file-path-wrapper">
-										<input class="file-path validate" type="text" placeholder="Votre nouvelle photo de profile">
-									</div>
-								</div>
-								<input type="submit" id="submit_update_profile_pic" hidden />
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button onclick="document.querySelector('#submit_update_profile_pic').click()" class="waves-effect waves-green btn-flat">Valider</button>
-				<a href="#!" class="modal-close waves-effect waves-green btn-flat" id="cancel_update_profile_pic">Annuler</a>
 			</div>
 		</div>
 	})

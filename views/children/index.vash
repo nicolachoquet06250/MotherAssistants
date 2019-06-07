@@ -56,8 +56,71 @@
 	@html.block('content_parent', function(model) {
 		<div class="container">
 			<div class="row">
-				<div class="col s12">
-					coucou
+				<div class="col s12 offset-l1 l10">
+					<div class="card">
+						<div class="card-image" style="height: 550px;">
+							<div class="row">
+								<div class="col s8 offset-s2">
+									<img src="/images/places-maxi-assistante-maternelle.png" />
+								</div>
+							</div>
+						</div>
+						<div class="card-content">
+							<div class="row">
+								<div class="col s12">
+									<span class="card-title black-text">
+										@model.children[0].last_name.toUpperCase() @model.children[0].first_name
+										<a href="/account/signout" class="black-text" style="position: absolute; margin-left: 10px">
+											<i class="material-icons" style="font-size: 30px;">power_settings_new</i>
+										</a>
+									</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col s12">
+									Date de naissance: <span id="birth_day" data-date="@model.children[0].birth_day"></span> ( <span id="age"></span> )
+								</div>
+							</div>
+							<div class="row buttons-child">
+								<div class="col s12 m3 button-child card waves-effect">
+									<div class="container">
+										<div class="row">
+											<div class="center-align col s4 offset-s4">
+												<i class="material-icons" style="font-size: 40px;">chat</i>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col s12 m3 button-child card waves-effect">
+									<div class="container">
+										<div class="row">
+											<div class="center-align col s4 offset-s4">
+												<i class="material-icons" style="font-size: 40px;">chat</i>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col s12 m3 button-child card waves-effect">
+									<div class="container">
+										<div class="row">
+											<div class="center-align col s4 offset-s4">
+												<i class="material-icons" style="font-size: 40px;">perm_media</i>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col s12 m3 button-child card waves-effect">
+									<div class="container">
+										<div class="row">
+											<div class="center-align col s4 offset-s4">
+												<i class="material-icons" style="font-size: 40px;">event_note</i>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
