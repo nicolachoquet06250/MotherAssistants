@@ -17,11 +17,11 @@
 							<div class="row">
 								<div class="input-field col s12">
 									<select name="role" id="role">
-										<option value="" disabled selected>En tant que</option>
+										<option value="" disabled selected>...</option>
 										<option value="ma">Assistante Maternelle</option>
 										<option value="parent">Parent</option>
 									</select>
-									<label for="role">Je me connecte</label>
+									<label for="role">Vous êtes</label>
 								</div>
 							</div>
 							<form id="ma-sign-in" method="post" action="/account/signInMA" class="row hide">
