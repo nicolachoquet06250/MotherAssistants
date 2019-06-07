@@ -40,7 +40,13 @@
 										<select name="my_mother_assistant" class="icons" id="my-mother-assistant">
 											<option value="" disabled selected>Votre assistante maternelle</option>
 											@model.motherassistants.forEach(function(ma) {
-												<option value="@ma._id" data-icon="/uploads/@ma.profile_pic">@ma.last_name @ma.first_name</option>
+												@if(ma.profile_pic !== null) {
+													@{ var profile_pic = '/uploads/' + ma.profile_pic }
+												}
+												else {
+													@{ var profile_pic = '/images/default_profile_pic.png' }
+												}
+												<option value="@ma._id" data-icon="@profile_pic">@ma.last_name @ma.first_name</option>
 											})
 										</select>
 										<label for="role">Votre assistante maternel</label>
