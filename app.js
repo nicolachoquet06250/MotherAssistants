@@ -7,7 +7,9 @@ let sassMiddleware = require('node-sass-middleware');
 let loadRoutes = require('./routes/loadRoutes').loadRoutes;
 let fileUpload = require('express-fileupload');
 let session = require('express-session');
+let cors = require('cors');
 let app = express();
+app.use(cors());
 let server = require('http').createServer(app);
 
 // view engine setup

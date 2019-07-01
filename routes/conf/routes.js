@@ -3,7 +3,8 @@ module.exports.routes = {
 	'/parents': require('../modules/parents'),
 	'/account': require('../modules/account'),
 	'/children': require('../modules/children'),
-	'/websocket': require('../modules/websocket')
+	'/websocket': require('../modules/websocket'),
+	'/api': require('../modules/api')
 };
 
 module.exports.modules = [
@@ -11,5 +12,6 @@ module.exports.modules = [
 	'parents',
 	'account',
 	'children',
-	'websocket'
+	'websocket',
+	'api'
 ];
